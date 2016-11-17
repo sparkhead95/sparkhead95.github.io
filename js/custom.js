@@ -109,6 +109,7 @@ spotLight1.angle = 0.5;
 spotLight1.castShadow = true;
 spotLight1.intensity = 1;
 
+/*
 var spotLight2 = new THREE.SpotLight(0xFFffff,10);
 spotLight2.position.set(85,0,100);
 spotLight2.target.position.set(85,0,0)
@@ -145,14 +146,16 @@ spotLight5.angle = 0.5;
 spotLight5.castShadow = true;
 spotLight5.intensity = 1;
 spotLight5.target.updateMatrixWorld();
+*/
 
 lights = new THREE.Object3D();
 lights.add(spotLight1);
+/*
 lights.add(spotLight2);
 lights.add(spotLight3);
 lights.add(spotLight4);
 lights.add(spotLight5);
-
+*/
 scene.add(lights);
 
 

@@ -157,7 +157,7 @@ var onKeyDown = function ( event ) {
 				document.addEventListener( 'keydown', onKeyDown, false );
 				document.addEventListener( 'keyup', onKeyUp, false );
 
-				raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
+				raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3(), 0, 10 );
 
 
 function animate() {
