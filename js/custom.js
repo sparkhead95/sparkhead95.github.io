@@ -41,7 +41,7 @@ roof.castShadow = true;
 scene.add(roof);
 
 // Back left wall
-var cube = new THREE.PlaneGeometry(100,500,5,8);
+var cube = new THREE.BoxGeometry(100,500,5,8);
 var cubeMat = new THREE.MeshPhongMaterial({color:0x88898, side: THREE.DoubleSide});
 var blWall = new THREE.Mesh(cube, cubeMat);
 blWall.position.set(50,0,-300);
@@ -54,7 +54,7 @@ brWall.receiveShadow = true;
 
 
 // Left wall
-cube = new THREE.PlaneGeometry(1000,200,5,8);
+cube = new THREE.BoxGeometry(1000,200,5,8);
 var lWall = new THREE.Mesh(cube, cubeMat);
 lWall.position.set(-75,0,100);
 lWall.receiveShadow = true;
