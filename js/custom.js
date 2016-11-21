@@ -22,18 +22,18 @@ scene.add(axis);
 
 // Floor
 var floorGeo = new THREE.PlaneGeometry(1000,1000,5,8);
-var floorMat = new THREE.MeshPhongMaterial({color:0x88898, side: THREE.DoubleSide});
+var floorMat = new THREE.MeshPhongMaterial({map:THREE.ImageUtils.loadTexture("img/floor.PNG"), side: THREE.DoubleSide});
 var floor = new THREE.Mesh(floorGeo, floorMat);
-floor.position.set(0,-20,0);
+floor.position.set(0,-20,100);
 floor.rotation.x =  Math.PI * 90 / 180;
 floor.receiveShadow = true;
 scene.add(floor);
 
 
 // Roof
-var roofGeo = new THREE.PlaneGeometry(500,500,5,8);
-var roofMat = new THREE.MeshPhongMaterial({color:0x88898, side: THREE.DoubleSide});
-var roof = new THREE.Mesh(roofGeo, floorMat);
+var roofGeo = new THREE.PlaneGeometry(1000,1000,5,8);
+var roofMat = new THREE.MeshPhongMaterial({color:0xffffff, side: THREE.DoubleSide});
+var roof = new THREE.Mesh(roofGeo, roofMat);
 roof.position.set(0,100,0);
 roof.rotation.x =  Math.PI * 90 / 180;
 roof.receiveShadow = true;
@@ -70,7 +70,7 @@ rWall.rotation.y =  Math.PI * 90 / 180;
 
 // Front wall
 var fWall = new THREE.Mesh(cube, cubeMat);
-fWall.position.set(0,0,200);
+fWall.position.set(0,0,500);
 fWall.receiveShadow = true;
 
 
@@ -94,8 +94,6 @@ ball.castShadow = true;
 scene.add(ball);
 
 var camera = new THREE.PerspectiveCamera(90,width/height,0.1,1000);
-camera.position.set(0, -10, 90);
-//camera.lookAt(ball);
 camera.rotation.x =  Math.PI * 90 / 180;
 
 var ambientLight = new THREE.AmbientLight(0xffffff,0.1);

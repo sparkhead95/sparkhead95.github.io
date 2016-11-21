@@ -92,6 +92,7 @@ var prevTime = performance.now();
 var velocity = new THREE.Vector3();
 
 controls = new THREE.PointerLockControls( camera );
+controls.getObject().position.set( 0, 10, -50);
 scene.add( controls.getObject() );
 
 var onKeyDown = function ( event ) {
