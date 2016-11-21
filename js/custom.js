@@ -162,46 +162,9 @@ scene.add(lights);
 //scene.add(camera);
 //camera.add(spotLight1);
 
-/*
-//controls
-controls = new THREE.TrackballControls( camera );
-                                controls.rotateSpeed = 2.0;
-                                controls.zoomSpeed = 1.2;
-                                controls.panSpeed = 0.8;
-                                controls.noZoom = true;
-                                controls.noPan = true;
-                                controls.staticMoving = true;
-                                controls.dynamicDampingFactor = 0.3;
-window.addEventListener( 'resize', onResize, false );
-*/
 
 function onResize() {
   renderer.setSize( window.innerWidth, window.innerHeight );
   camera.aspect = ( window.innerWidth / window.innerHeight );
   camera.updateProjectionMatrix();
 }
-/*
-//controls handler
- function onDocumentMouseDown( event ) {
-                                event.preventDefault();
-                                
-                                        controls.enabled = true;
-                                        
-}
-*/
-
-//Making a render loop for scenes
-//draw: renderer.render(scene,camera);
-function render(){
-        renderer.render(scene,camera);
-
-        requestAnimationFrame(render);
-var clock = new THREE.Clock();
-        var delta = clock.getDelta();
-//controls.update(delta);
-}
-    
-    
-    
-    
-render();
