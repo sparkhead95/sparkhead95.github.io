@@ -87,6 +87,7 @@ var moveForward = false;
 var moveBackward = false;
 var moveLeft = false;
 var moveRight = false;
+var shiftRun = false;
 var canJump = false;
 var prevTime = performance.now();
 var velocity = new THREE.Vector3();
@@ -122,6 +123,10 @@ var onKeyDown = function ( event ) {
 							if ( canJump === true ) velocity.y += 350;
 							canJump = false;
 							break;
+                            
+                        case 16: //shift
+                            shiftRun = true;
+                            break;
 
 					}
 
@@ -150,6 +155,10 @@ var onKeyDown = function ( event ) {
 						case 68: // d
 							moveRight = false;
 							break;
+                            
+                        case 16: //shift
+                            shiftRun = false;
+                            break;
 
 					}
 
@@ -159,13 +168,21 @@ var onKeyDown = function ( event ) {
 				document.addEventListener( 'keyup', onKeyUp, false );
 
 				raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3(), 0, 10 );
+                    var lastFreeX;
+                    var lastFreeY;
+                    var lastFreeZ;
+                
 
 
 function animate() {
 
 				requestAnimationFrame( animate );
 
+                    
 				if ( controlsEnabled ) {
+                    var originPoint = character.position.clone();
+                    
+                    
 					raycaster.ray.origin.copy( controls.getObject().position );
 					raycaster.ray.origin.y -= 10;
 
@@ -180,22 +197,81 @@ function animate() {
 					velocity.z -= velocity.z * 10.0 * delta;
 
 					velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+                    
+                    
+                    var hit = false;
+                    
+                    
+                    for (var vertexIndex = 0; vertexIndex < character.geometry.vertices.length; vertexIndex++) {		
+		              var localVertex = character.geometry.vertices[vertexIndex].clone();
+		              var globalVertex = localVertex.applyMatrix4( character.matrix );
+		              var directionVector = globalVertex.sub( character.position );
+		
+		              var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+		              var collisionResults = ray.intersectObjects( collidableMeshList );
+		              if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ){
+                            hit = true;    
+                            //console.log("hit");
+                      }
+                    }	
+                    
+                    if (hit == false){
+                        console.log("reset free");
+                        lastFreeX = character.position.x;
+                        lastFreeY = character.position.y;
+                        lastFreeZ = character.position.z;
+                        console.log(lastFreeX);
+                        console.log(lastFreeY);
+                        console.log(lastFreeZ);
+                        
+                    }
 
-					if ( moveForward ) velocity.z -= 800.0 * delta;
-					if ( moveBackward ) velocity.z += 800.0 * delta;
+					if ( moveForward ){
+                        velocity.z -= 800.0 * delta;
+                    } 
 
-					if ( moveLeft ) velocity.x -= 800.0 * delta;
-					if ( moveRight ) velocity.x += 800.0 * delta;
+					if ( moveBackward ){
+                        velocity.z += 800.0 * delta;
+                    } 
 
+
+					if ( moveLeft ){
+                        velocity.x -= 800.0 * delta;
+                    } 
+
+					if ( moveRight ){
+                        velocity.x += 800.0 * delta;
+                    } 
+
+
+                    if ( shiftRun && moveForward ){
+                        velocity.z -= 1500.0 * delta;
+                    } 
+                    
 					if ( isOnObject === true ) {
 						velocity.y = Math.max( 0, velocity.y );
 
 						canJump = true;
 					}
 
-					controls.getObject().translateX( velocity.x * delta );
-					controls.getObject().translateY( velocity.y * delta );
-					controls.getObject().translateZ( velocity.z * delta );
+                    //console.log("hit statement");
+                    //console.log(hit);
+                    if (!hit){
+                       controls.getObject().translateX( velocity.x * delta );
+					   controls.getObject().translateY( velocity.y * delta );
+					   controls.getObject().translateZ( velocity.z * delta );
+                    }
+                    else {
+                        controls.getObject().position.x = lastFreeX;
+                        controls.getObject().position.y = lastFreeY;
+                        controls.getObject().position.z = lastFreeZ;
+                        console.log("set to last position");
+                        hit = false;
+                        console.log(controls.getObject().position);
+                        //console.log(lastFreePoint);
+                        
+                    }
+					
 
 					if ( controls.getObject().position.y < 10 ) {
 
@@ -205,7 +281,15 @@ function animate() {
 						canJump = true;
 
 					}
+                    //console.log(controls.getObject().position);
+                    var pos = (controls.getObject().position);
+                    character.position.set(pos.x,pos.y,pos.z);
+                    //console.log(character.position);
 
+                    
+                    
+                    
+                    
 					prevTime = time;
 
 				}
