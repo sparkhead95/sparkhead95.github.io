@@ -181,11 +181,11 @@ function animate() {
 
 					velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-					if ( moveForward ) velocity.z -= 400.0 * delta;
-					if ( moveBackward ) velocity.z += 400.0 * delta;
+					if ( moveForward ) velocity.z -= 800.0 * delta;
+					if ( moveBackward ) velocity.z += 800.0 * delta;
 
-					if ( moveLeft ) velocity.x -= 400.0 * delta;
-					if ( moveRight ) velocity.x += 400.0 * delta;
+					if ( moveLeft ) velocity.x -= 800.0 * delta;
+					if ( moveRight ) velocity.x += 800.0 * delta;
 
 					if ( isOnObject === true ) {
 						velocity.y = Math.max( 0, velocity.y );
