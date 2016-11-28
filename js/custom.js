@@ -22,7 +22,7 @@ var collidableMeshList = [];
 // Define a corridor
 
 // Floor
-var floorGeo = new THREE.PlaneGeometry(1000,1000,5,8);
+var floorGeo = new THREE.PlaneGeometry(1000,1750,5,8);
 var floorMat = new THREE.MeshPhongMaterial({map:THREE.ImageUtils.loadTexture("img/floor.PNG"), side: THREE.DoubleSide});
 var floor = new THREE.Mesh(floorGeo, floorMat);
 
@@ -33,7 +33,7 @@ scene.add(floor);
 
 
 // Roof
-var roofGeo = new THREE.PlaneGeometry(1000,1000,5,8);
+var roofGeo = new THREE.PlaneGeometry(1000,1500,5,8);
 var roofMat = new THREE.MeshPhongMaterial({color:0xffffff, side: THREE.DoubleSide});
 var roof = new THREE.Mesh(roofGeo, roofMat);
 roof.position.set(0,100,0);
@@ -44,32 +44,87 @@ roof.castShadow = true;
 scene.add(roof);
 
 
-
+// Define the lift
 
 // Left wall
 cube = new THREE.BoxGeometry(200,200,5,8);
 var cubeMat = new THREE.MeshPhongMaterial({color:0x88898, side: THREE.DoubleSide});
 var lWall = new THREE.Mesh(cube, cubeMat);
-lWall.position.set(-100,0,400);
+lWall.position.set(-50,0,450);
 lWall.receiveShadow = true;
+lWall.castShadow = true;
 lWall.rotation.y =  Math.PI * 90 / 180;
 collidableMeshList.push(lWall);
-
+scene.add(lWall);
 
 // Right wall
 var rWall = new THREE.Mesh(cube, cubeMat);
-rWall.position.set(100,0,400);
+rWall.position.set(50,0,450);
 rWall.receiveShadow = true;
+rWall.castShadow = true;
 rWall.rotation.y =  Math.PI * 90 / 180;
 collidableMeshList.push(rWall);
+scene.add(rWall);
 
 
-// Front wall
+// Back wall
 cube = new THREE.BoxGeometry(1000,200,5,8);
 var fWall = new THREE.Mesh(cube, cubeMat);
 fWall.position.set(0,0,500);
 fWall.receiveShadow = true;
+fWall.castShadow = true;
 collidableMeshList.push(fWall);
+scene.add(fWall);
+
+// front left wall
+cube = new THREE.BoxGeometry(55,200,5,8);
+var fLWall = new THREE.Mesh(cube, cubeMat);
+fLWall.position.set(-75,0,350);
+fLWall.receiveShadow = true;
+fLWall.castShadow = true;
+collidableMeshList.push(fLWall);
+scene.add(fLWall);
+
+// front right wall
+cube = new THREE.BoxGeometry(55,200,5,8);
+var fRWall = new THREE.Mesh(cube, cubeMat);
+fRWall.position.set(75,0,350);
+fRWall.receiveShadow = true;
+fRWall.castShadow = true;
+collidableMeshList.push(fRWall);
+scene.add(fRWall);
+
+
+// Far left wall
+cube = new THREE.BoxGeometry(1500,200,5,8);
+var farLWall = new THREE.Mesh(cube, cubeMat);
+farLWall.position.set(-500,0,-250);
+farLWall.receiveShadow = true;
+farLWall.castShadow = true;
+farLWall.rotation.y =  Math.PI * 90 / 180;
+collidableMeshList.push(farLWall);
+scene.add(farLWall);
+
+// Far right wall
+var farRWall = new THREE.Mesh(cube, cubeMat);
+farRWall.position.set(500,0,-250);
+farRWall.receiveShadow = true;
+farRWall.castShadow = true;
+farRWall.rotation.y =  Math.PI * 90 / 180;
+collidableMeshList.push(farRWall);
+scene.add(farRWall);
+
+// Far front wall
+cube = new THREE.BoxGeometry(1000,200,5,8);
+var farFWall = new THREE.Mesh(cube, cubeMat);
+farFWall.position.set(0,0,-750);
+farFWall.receiveShadow = true;
+farFWall.castShadow = true;
+collidableMeshList.push(farFWall);
+scene.add(farFWall);
+
+
+
 
 // Make 7 door frames
 // Define the cube 
@@ -120,6 +175,7 @@ var tCube = new THREE.BoxGeometry(500,50,5,8);
 var leftTFrame = new THREE.Mesh(tCube, cubeMat);
 leftTFrame.position.set(-100,75,0);
 leftTFrame.rotation.y = Math.PI * 90/180;
+collidableMeshList.push(leftTFrame);
 leftTFrame.castShadow = true;
 leftTFrame.receiveShadow = true;
 scene.add(leftTFrame);
@@ -127,16 +183,33 @@ scene.add(leftTFrame);
 var rightTFrame = new THREE.Mesh(tCube, cubeMat);
 rightTFrame.position.set(100,75,0);
 rightTFrame.rotation.y = Math.PI * 90/180;
+collidableMeshList.push(rightTFrame);
 rightTFrame.castShadow = true;
 rightTFrame.receiveShadow = true;
 scene.add(rightTFrame);
 
 
-room = new THREE.Object3D();
-room.add(lWall);
-room.add(rWall);
-room.add(fWall);
-scene.add(room);
+// Final door Frame
+var cube = new THREE.BoxGeometry(500,200,5,8);
+finalLFrame = new THREE.Mesh(cube, cubeMat); 
+finalRFrame = new THREE.Mesh(cube, cubeMat); 
+finalTFrame = new THREE.Mesh(cube, cubeMat); 
+finalLFrame.position.set(300,0,-350); // Define their position
+finalRFrame.position.set(-300,0,-350);
+finalTFrame.position.set(0,150,-350);
+collidableMeshList.push(finalLFrame,finalRFrame,finalTFrame);
+finalRFrame.castShadow = true;
+finalRFrame.receiveShadow = true;
+finalTFrame.receiveShadow = true;
+finalLFrame.castShadow = true;
+finalTFrame.castShadow = true;
+finalLFrame.receiveShadow = true;
+scene.add(finalLFrame);
+scene.add(finalTFrame);
+scene.add(finalRFrame);
+
+
+
 
 
 
@@ -164,20 +237,11 @@ for (i = 0; i < corridorLightsArray.length; i++){
 
 scene.add(corridorLights);
 
-/*
-// Define the Ball
-var geometry = new THREE.BoxGeometry(5, 5, 20, 0, 0, 50);
-var material = new THREE.MeshPhongMaterial({color:0xFF0000});
-var ball = new THREE.Mesh(geometry, material);
-ball.position.set(0,0,50);
-ball.castShadow = true;
-scene.add(ball);
-*/
 
 var camera = new THREE.PerspectiveCamera(90,width/height,0.1,1000);
 camera.rotation.x =  Math.PI * 90 / 180;
 
-var ambientLight = new THREE.AmbientLight(0xffffff,1);
+var ambientLight = new THREE.AmbientLight(0xffffff,0.1);
 scene.add(ambientLight);
 
 
@@ -188,12 +252,7 @@ var character = new THREE.Mesh( cubeGeometry, wireMaterial );
 character.position.set(0,0,0);
 scene.add( character );	
 
-
-
-
-
-//var texture = new THREE.Texture();
-
+/*
 var onProgress = function ( xhr ) {
 					if ( xhr.lengthComputable ) {
 						var percentComplete = xhr.loaded / xhr.total * 100;
@@ -206,28 +265,11 @@ var onProgress = function ( xhr ) {
 
 
 
-/*
 var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {
     console.log( item, loaded, total );
 };
 
-var loader = new THREE.OBJLoader( manager );
-loader.load( 'obj/sofa.obj', function(object) {
-
-    monkey = object;
-    monkey.rotation.y = Math.PI;
-    monkey.position.set(200,-50,-50);
-    monkey.scale.set(0.05,0.05,0.05);
-    object.traverse( function ( child ) {
-	   if ( child instanceof THREE.Mesh ) {
-		    child.material.color = new THREE.Color(0X00FF00);
-            child.geometry.computeVertexNormals();
-	   }
-    } );
-scene.add(monkey);
-}, onProgress, onError );
-*/
 
 var mtlLoader = new THREE.MTLLoader();
 mtlLoader.setPath( 'obj/' );
@@ -243,7 +285,7 @@ mtlLoader.load( 'sofa.mtl', function( materials ) {
 		scene.add( object );
 	}, onProgress, onError );
 });
-
+*/
 
 
 
