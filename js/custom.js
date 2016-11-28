@@ -47,10 +47,10 @@ scene.add(roof);
 
 
 // Left wall
-cube = new THREE.BoxGeometry(1000,200,5,8);
+cube = new THREE.BoxGeometry(200,200,5,8);
 var cubeMat = new THREE.MeshPhongMaterial({color:0x88898, side: THREE.DoubleSide});
 var lWall = new THREE.Mesh(cube, cubeMat);
-lWall.position.set(-100,0,100);
+lWall.position.set(-100,0,400);
 lWall.receiveShadow = true;
 lWall.rotation.y =  Math.PI * 90 / 180;
 collidableMeshList.push(lWall);
@@ -58,60 +58,93 @@ collidableMeshList.push(lWall);
 
 // Right wall
 var rWall = new THREE.Mesh(cube, cubeMat);
-rWall.position.set(100,0,100);
+rWall.position.set(100,0,400);
 rWall.receiveShadow = true;
 rWall.rotation.y =  Math.PI * 90 / 180;
 collidableMeshList.push(rWall);
 
 
 // Front wall
+cube = new THREE.BoxGeometry(1000,200,5,8);
 var fWall = new THREE.Mesh(cube, cubeMat);
 fWall.position.set(0,0,500);
 fWall.receiveShadow = true;
 collidableMeshList.push(fWall);
 
-// Door frame definition
-// Left Frame
+// Make 7 door frames
+// Define the cube 
 var cube = new THREE.BoxGeometry(100,200,5,8);
-var lFrame = new THREE.Mesh(cube, cubeMat);
-lFrame.position.set(75,0,0);
-collidableMeshList.push(lFrame);
-lFrame.receiveShadow = true;
+var tCube = new THREE.BoxGeometry(200,50,5,8);
 
-// Right Frame
-var rFrame = new THREE.Mesh(cube, cubeMat);
-rFrame.position.set(-75,0,0);
-collidableMeshList.push(rFrame);
-rFrame.receiveShadow = true;
+	
+var doorFrame1, doorFrame2, doorFrame3, doorFrame4, doorFrame5, doorFrame6, doorFrame7;
+var doorFrameArray = [doorFrame1, doorFrame2, doorFrame3, doorFrame4];
+var lFrame1, lFrame2, lFrame3, lFrame4, lFrame5, lFrame6, lFrame7;
+var lFrameArray = [lFrame1, lFrame2, lFrame3, lFrame4];
+var rFrame1, rFrame2, rFrame3, rFrame4, rFrame5, rFrame6, rFrame7;
+var rFrameArray = [rFrame1, rFrame2, rFrame3, rFrame4];
 
-// Top Frame
-var tFrame = new THREE.Mesh(cube, cubeMat);
-tFrame.position.set(0,150,0);
-collidableMeshList.push(tFrame);
-tFrame.receiveShadow = true;
+var doorFrames = new THREE.Object3D();
+
+var min = 300; // Where the first doorframe is. Lower number means it is further down the corridor
+
+// Loop through the door frame array and define where and what each one is
+for (i = 0; i < doorFrameArray.length; i++){
+	
+	doorFrameArray[i] = new THREE.Object3D(); // Define each doorFrame in the array as an object	
+	
+	lFrameArray[i] = new THREE.Mesh(cube, cubeMat); // Define the sides of the frame
+	rFrameArray[i] = new THREE.Mesh(cube, cubeMat); // Define the sides of the frame
+	
+	lFrameArray[i].position.set(100,0,min); // Define their position
+	rFrameArray[i].position.set(-100,0,min);
+
+	lFrameArray[i].rotation.y = Math.PI * 90 / 180;
+	rFrameArray[i].rotation.y = Math.PI * 90 / 180;
+
+	collidableMeshList.push(lFrameArray[i],rFrameArray[i]); // Make it collidable
+
+	
+	lFrameArray[i].receiveShadow = true; // Make them all receive and cash shadow
+	rFrameArray[i].receiveShadow = true;
+	lFrameArray[i].castShadow = true;
+	rFrameArray[i].castShadow = true;
+
+	doorFrameArray[i].add(lFrameArray[i],rFrameArray[i]);
+	scene.add(doorFrameArray[i]);
+	min = min - 200;
+}
 
 
+var tCube = new THREE.BoxGeometry(500,50,5,8);
+var leftTFrame = new THREE.Mesh(tCube, cubeMat);
+leftTFrame.position.set(-100,75,0);
+leftTFrame.rotation.y = Math.PI * 90/180;
+leftTFrame.castShadow = true;
+leftTFrame.receiveShadow = true;
+scene.add(leftTFrame);
 
-doorFrame = new THREE.Object3D();
-doorFrame.add(rFrame);
-doorFrame.add(lFrame);
-doorFrame.add(tFrame);
-doorFrame.position.z = -300;
-scene.add(doorFrame);
+var rightTFrame = new THREE.Mesh(tCube, cubeMat);
+rightTFrame.position.set(100,75,0);
+rightTFrame.rotation.y = Math.PI * 90/180;
+rightTFrame.castShadow = true;
+rightTFrame.receiveShadow = true;
+scene.add(rightTFrame);
+
 
 room = new THREE.Object3D();
 room.add(lWall);
 room.add(rWall);
 room.add(fWall);
-//room.rotation.y =  Math.PI * 90 / 180;
 scene.add(room);
+
+
 
 var spotLight1, spotLight2, spotLight3, spotLight4, spotLight5;
 var corridorLightsArray = [spotLight1, spotLight2, spotLight3, spotLight4, spotLight5];
 corridorLights = new THREE.Object3D();
-//console.log(corridorLightsArray.length);
 var spotLightHelper;
-var min = 400; //Where the light strip starts for corridor. Further down the corridor means a lower number than this.
+min = 400; //Where the light strip starts for corridor. Further down the corridor means a lower number than this.
 
 for (i = 0; i < corridorLightsArray.length; i++){
     corridorLightsArray[i] = new THREE.SpotLight(0xFFffff,10); // Tell JS what the light is
@@ -144,7 +177,7 @@ scene.add(ball);
 var camera = new THREE.PerspectiveCamera(90,width/height,0.1,1000);
 camera.rotation.x =  Math.PI * 90 / 180;
 
-var ambientLight = new THREE.AmbientLight(0xffffff,0.1);
+var ambientLight = new THREE.AmbientLight(0xffffff,1);
 scene.add(ambientLight);
 
 
@@ -171,19 +204,9 @@ var onProgress = function ( xhr ) {
 				var onError = function ( xhr ) {
 				};
 
+
+
 /*
-var loader = new THREE.ImageLoader( manager );
-				loader.load( 'textures/UV_Grid_Sm.jpg', function ( image ) {
-
-					texture.image = image;
-					texture.needsUpdate = true;
-
-				} );
-
-*/
-
-//var material = new THREE.MeshPhongMaterial({color:0xFF0000});
-
 var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {
     console.log( item, loaded, total );
@@ -204,7 +227,22 @@ loader.load( 'obj/sofa.obj', function(object) {
     } );
 scene.add(monkey);
 }, onProgress, onError );
+*/
 
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath( 'obj/' );
+mtlLoader.load( 'sofa.mtl', function( materials ) {
+	materials.preload();
+	var objLoader = new THREE.OBJLoader();
+	objLoader.setMaterials( materials );
+	objLoader.setPath( 'obj/' );
+	objLoader.load( 'sofa.obj', function ( object ) {
+		object.position.y = Math.PI / 2;
+		object.position.set(-150,-50,0);
+		object.scale.set(0.05,0.05,0.05);
+		scene.add( object );
+	}, onProgress, onError );
+});
 
 
 

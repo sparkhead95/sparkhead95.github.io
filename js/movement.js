@@ -216,13 +216,13 @@ function animate() {
                     }	
                     
                     if (hit == false){
-                        console.log("reset free");
+                        //console.log("reset free");
                         lastFreeX = character.position.x;
                         lastFreeY = character.position.y;
                         lastFreeZ = character.position.z;
-                        console.log(lastFreeX);
-                        console.log(lastFreeY);
-                        console.log(lastFreeZ);
+                        //console.log(lastFreeX);
+                        //console.log(lastFreeY);
+                        //console.log(lastFreeZ);
                         
                     }
 
@@ -265,9 +265,8 @@ function animate() {
                         controls.getObject().position.x = lastFreeX;
                         controls.getObject().position.y = lastFreeY;
                         controls.getObject().position.z = lastFreeZ;
-                        console.log("set to last position");
                         hit = false;
-                        console.log(controls.getObject().position);
+                        //console.log(controls.getObject().position);
                         //console.log(lastFreePoint);
                         
                     }
