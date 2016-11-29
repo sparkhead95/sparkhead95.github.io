@@ -123,8 +123,57 @@ farFWall.castShadow = true;
 collidableMeshList.push(farFWall);
 scene.add(farFWall);
 
+// Separators for the rooms (includes the secret wall for the first left room)
+var secretLSep, fRSep, sRSep, fLSep, sLSep;
+var leftSeparators = [fLSep, sLSep];
+var rightSeparators = [fRSep, sRSep];
 
 
+// First left room secret separator
+cube = new THREE.BoxGeometry(400,200,5,8);
+secretLSep = new THREE.Mesh(cube, cubeMat);
+secretLSep.position.set(-300,0,350);
+secretLSep.receiveShadow = true;
+secretLSep.castShadow = true;
+collidableMeshList.push(secretLSep);
+scene.add(secretLSep);
+
+var min = 100; // Where the first separator is on the Z axis
+var startX = -300;
+
+for (i = 0; i < leftSeparators.length; i++){
+    leftSeparators[i] = new THREE.Mesh(cube, cubeMat);
+    leftSeparators[i].position.set(-300,0,min);
+    leftSeparators[i].receiveShadow = true;
+    leftSeparators[i].castShadow = true;
+    collidableMeshList.push(leftSeparators[i]);
+    scene.add(leftSeparators[i]);
+    min = min - 200;
+}
+
+min = 100;
+
+for (i = 0; i < rightSeparators.length; i++){
+    rightSeparators[i] = new THREE.Mesh(cube, cubeMat);
+    rightSeparators[i].position.set(300,0,min);
+    rightSeparators[i].receiveShadow = true;
+    rightSeparators[i].castShadow = true;
+    collidableMeshList.push(rightSeparators[i]);
+    scene.add(rightSeparators[i]);
+    min = min - 200;
+}
+
+
+/*
+// First left room secret wall
+cube = new THREE.BoxGeometry(400,200,5,8);
+var fLSep = new THREE.Mesh(cube, cubeMat);
+fLSep.position.set(-300,0,100);
+fLSep.receiveShadow = true;
+fLSep.castShadow = true;
+collidableMeshList.push(fLSep);
+scene.add(fLSep);
+*/
 
 // Make 7 door frames
 // Define the cube 
@@ -141,7 +190,7 @@ var rFrameArray = [rFrame1, rFrame2, rFrame3, rFrame4];
 
 var doorFrames = new THREE.Object3D();
 
-var min = 300; // Where the first doorframe is. Lower number means it is further down the corridor
+min = 300; // Where the first doorframe is. Lower number means it is further down the corridor
 
 // Loop through the door frame array and define where and what each one is
 for (i = 0; i < doorFrameArray.length; i++){
@@ -210,6 +259,7 @@ scene.add(finalRFrame);
 
 // Final door
 cube = new THREE.BoxGeometry(50,100,5,8);
+cubeMat = new THREE.MeshPhongMaterial({color:0x7A5230, side: THREE.DoubleSide});
 var leftDoor = new THREE.Mesh(cube, cubeMat);
 leftDoor.position.set(-25,0,-350);
 collidableMeshList.push(leftDoor);
@@ -218,7 +268,7 @@ leftDoor.receiveShadow = true;
 scene.add(leftDoor);
 
 var rightDoor = new THREE.Mesh(cube, cubeMat);
-rightDoor.position.set(25,0,-343);
+rightDoor.position.set(26,0,-344);
 rightDoor.rotation.y = Math.PI * 13/180;
 collidableMeshList.push(rightDoor);
 rightDoor.castShadow = true;
@@ -235,7 +285,7 @@ min = 400; //Where the light strip starts for corridor. Further down the corrido
 
 for (i = 0; i < corridorLightsArray.length; i++){
     corridorLightsArray[i] = new THREE.SpotLight(0xFFffff,10); // Tell JS what the light is
-    corridorLightsArray[i].position.set(0,100,min);
+    corridorLightsArray[i].position.set(0,95,min);
     corridorLightsArray[i].target.position.set(0,0,min);
     min = min - 200;
     corridorLightsArray[i].penumbra = 1;
@@ -245,8 +295,8 @@ for (i = 0; i < corridorLightsArray.length; i++){
     corridorLightsArray[i].target.updateMatrixWorld();
     corridorLights.add(corridorLightsArray[i]);
     //console.log(corridorLightsArray[i]);
-    spotLightHelper = new THREE.SpotLightHelper(corridorLightsArray[i]);
-    scene.add(spotLightHelper);
+    //spotLightHelper = new THREE.SpotLightHelper(corridorLightsArray[i]);
+    //scene.add(spotLightHelper);
 }
 
 scene.add(corridorLights);
@@ -274,7 +324,7 @@ scene.add(ambientLight);
 
 
 // Define character
-var cubeGeometry = new THREE.CubeGeometry(5,5,5,1,1,1);
+var cubeGeometry = new THREE.CubeGeometry(10,10,10,1,1,1);
 var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:false } );
 var character = new THREE.Mesh( cubeGeometry, wireMaterial );
 character.position.set(0,0,0);

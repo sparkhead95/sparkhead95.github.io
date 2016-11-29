@@ -280,15 +280,32 @@ function animate() {
 						canJump = true;
 
 					}
+                    
+                    
+                    // Handle out of bounds
+                    if (controls.getObject().position.x > 560){
+                        controls.getObject().position.x = 0;
+                        console.log("X was out positive! Reset character.");
+                    }
+                    else if (controls.getObject().position.x < -565){
+                        controls.getObject().position.x = 0;
+                        console.log("X was out negative! Reset character.");
+                    }
+                    else if (controls.getObject().position.z > 500){
+                        controls.getObject().position.z = 0;
+                        console.log("Z was out positive! Reset character.");
+                    }
+                    else if (controls.getObject().position.z < -765){
+                        controls.getObject().position.z = 0;
+                        console.log("Z was out negative! Reset character.");
+                    }
+                    
+                    
                     //console.log(controls.getObject().position);
                     var pos = (controls.getObject().position);
                     character.position.set(pos.x,pos.y,pos.z);
                     //console.log(character.position);
-
-                    
-                    
-                    
-                    
+                
 					prevTime = time;
 
 				}
