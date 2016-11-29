@@ -33,7 +33,7 @@ scene.add(floor);
 
 
 // Roof
-var roofGeo = new THREE.PlaneGeometry(1000,1500,5,8);
+var roofGeo = new THREE.BoxGeometry(1000,1500,5,8);
 var roofMat = new THREE.MeshPhongMaterial({color:0xffffff, side: THREE.DoubleSide});
 var roof = new THREE.Mesh(roofGeo, roofMat);
 roof.position.set(0,100,0);
@@ -208,13 +208,27 @@ scene.add(finalLFrame);
 scene.add(finalTFrame);
 scene.add(finalRFrame);
 
+// Final door
+cube = new THREE.BoxGeometry(50,100,5,8);
+var leftDoor = new THREE.Mesh(cube, cubeMat);
+leftDoor.position.set(-25,0,-350);
+collidableMeshList.push(leftDoor);
+leftDoor.castShadow = true;
+leftDoor.receiveShadow = true;
+scene.add(leftDoor);
+
+var rightDoor = new THREE.Mesh(cube, cubeMat);
+rightDoor.position.set(25,0,-343);
+rightDoor.rotation.y = Math.PI * 13/180;
+collidableMeshList.push(rightDoor);
+rightDoor.castShadow = true;
+rightDoor.receiveShadow = true;
+scene.add(rightDoor);
 
 
 
-
-
-var spotLight1, spotLight2, spotLight3, spotLight4, spotLight5;
-var corridorLightsArray = [spotLight1, spotLight2, spotLight3, spotLight4, spotLight5];
+var spotLight1, spotLight2, spotLight3, spotLight4;
+var corridorLightsArray = [spotLight1, spotLight2, spotLight3, spotLight4];
 corridorLights = new THREE.Object3D();
 var spotLightHelper;
 min = 400; //Where the light strip starts for corridor. Further down the corridor means a lower number than this.
@@ -231,11 +245,25 @@ for (i = 0; i < corridorLightsArray.length; i++){
     corridorLightsArray[i].target.updateMatrixWorld();
     corridorLights.add(corridorLightsArray[i]);
     //console.log(corridorLightsArray[i]);
-    //spotLightHelper = new THREE.SpotLightHelper(corridorLightsArray[i]);
-    //scene.add(spotLightHelper);
+    spotLightHelper = new THREE.SpotLightHelper(corridorLightsArray[i]);
+    scene.add(spotLightHelper);
 }
 
 scene.add(corridorLights);
+
+
+// Final room light
+var fallenLamp = new THREE.SpotLight(0xFFffff,10);
+fallenLamp.position.set(450,-40,-650);
+fallenLamp.target.position.set(45,0,-340);
+fallenLamp.penumbra = 1;
+fallenLamp.angle = 0.25;
+fallenLamp.castShadow = true;
+fallenLamp.intensity = 2;
+fallenLamp.target.updateMatrixWorld();
+scene.add(fallenLamp);
+//spotLightHelper = new THREE.SpotLightHelper(fallenLamp);
+//scene.add(spotLightHelper);
 
 
 var camera = new THREE.PerspectiveCamera(90,width/height,0.1,1000);
