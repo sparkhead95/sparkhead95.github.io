@@ -354,6 +354,19 @@ for (i = 0; i < corridorLightsArray.length; i++){
 
 scene.add(corridorLights);
 
+// test light
+var testLight = new THREE.SpotLight(0xFFffff,10);
+testLight.position.set(-250,95,-200);
+testLight.target.position.set(-250,0,-200);
+testLight.penumbra = 1;
+testLight.angle = 0.5;
+testLight.castShadow = true;
+testLight.intensity = 1;
+testLight.target.updateMatrixWorld();
+scene.add(testLight);
+var spotLightHelper5 = new THREE.SpotLightHelper(testLight);
+scene.add(spotLightHelper5);
+
 
 // Final room light
 var fallenLamp = new THREE.SpotLight(0xFFffff,10);
