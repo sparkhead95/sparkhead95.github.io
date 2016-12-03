@@ -308,7 +308,7 @@ function animate() {
                     //console.log(controls.getObject().position);
                     var pos = (controls.getObject().position);
                     character.position.set(pos.x,pos.y,pos.z);
-                    interactionCube.position.set(pos.x,pos.y, pos.z - 1);
+                    //interactionCube.position.set(pos.x,pos.y, pos.z - 1);
                     //console.log(character.position);
                 
 					prevTime = time;

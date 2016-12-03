@@ -383,13 +383,14 @@ var character = new THREE.Mesh( cubeGeometry, wireMaterial );
 character.position.set(0,0,0);
 scene.add( character );	
 
+/*
 // Define interaction cube
 cubeGeometry = new THREE.CubeGeometry(0.1,0.1,0.1,1,1,1);
 wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
 var interactionCube = new THREE.Mesh( cubeGeometry, wireMaterial );
 interactionCube.position.set(0,0,-10);
 scene.add(interactionCube);
-
+*/
 
 var onProgress = function ( xhr ) {
 					if ( xhr.lengthComputable ) {
@@ -456,7 +457,7 @@ scene.add(testCube);
 // little cube to test lights on wall
 cube = new THREE.BoxGeometry(20,20,20,20);
 var testCube2 = new THREE.Mesh(cube, cubeMat);
-testCube2.position.set(250,0,-500);
+testCube2.position.set(-200,0,-200);
 testCube2.receiveShadow = true;
 testCube2.castShadow = true;
 collidableMeshList.push(testCube2);
