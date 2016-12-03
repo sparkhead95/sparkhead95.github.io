@@ -241,7 +241,7 @@ scene.add(rightTFrame);
 
 
 // Final door Frame
-var cube = new THREE.BoxGeometry(500,200,20,8);
+var cube = new THREE.BoxGeometry(500,200,5,8);
 finalLFrame = new THREE.Mesh(cube, cubeMat); 
 finalRFrame = new THREE.Mesh(cube, cubeMat); 
 finalTFrame = new THREE.Mesh(cube, cubeMat); 
@@ -342,7 +342,7 @@ for (i = 0; i < corridorLightsArray.length; i++){
     corridorLightsArray[i].target.position.set(0,0,min);
     min = min - 200;
     corridorLightsArray[i].penumbra = 1;
-    corridorLightsArray[i].angle = 1;
+    corridorLightsArray[i].angle = 0.5;
     corridorLightsArray[i].castShadow = true;
     corridorLightsArray[i].intensity = 0.7;
     corridorLightsArray[i].target.updateMatrixWorld();
@@ -354,6 +354,7 @@ for (i = 0; i < corridorLightsArray.length; i++){
 
 scene.add(corridorLights);
 
+/*
 // test light
 var testLight = new THREE.SpotLight(0xFFffff,10);
 testLight.position.set(-250,95,-200);
@@ -366,18 +367,23 @@ testLight.target.updateMatrixWorld();
 scene.add(testLight);
 var spotLightHelper5 = new THREE.SpotLightHelper(testLight);
 scene.add(spotLightHelper5);
-
+*/
 
 // Final room light
 var fallenLamp = new THREE.SpotLight(0xFFffff,10);
-fallenLamp.position.set(450,-40,-650);
+fallenLamp.position.set(250,-40,-450);
 fallenLamp.target.position.set(45,0,-340);
 fallenLamp.penumbra = 1;
+fallenLamp.shadowMapHeight = 2048;
+fallenLamp.shadowMapWidth = 2048;
+fallenLamp.shadowDarkness = 0.2;
+
 fallenLamp.angle = 0.25;
 fallenLamp.castShadow = true;
 fallenLamp.intensity = 1;
+fallenLamp.distance = 500
 fallenLamp.target.updateMatrixWorld();
-//scene.add(fallenLamp);
+scene.add(fallenLamp);
 //spotLightHelper = new THREE.SpotLightHelper(fallenLamp);
 //scene.add(spotLightHelper);
 
@@ -390,7 +396,7 @@ scene.add(ambientLight);
 
 
 // Define character
-var cubeGeometry = new THREE.CubeGeometry(10,10,10,1,1,1);
+var cubeGeometry = new THREE.BoxGeometry(20,20,10,1,1,1);
 var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:false } );
 var character = new THREE.Mesh( cubeGeometry, wireMaterial );
 character.position.set(0,0,0);
