@@ -216,6 +216,8 @@ for (i = 0; i < doorFrameArray.length; i++){
 
 	doorFrameArray[i].add(lFrameArray[i],rFrameArray[i]);
 	scene.add(doorFrameArray[i]);
+    console.log(lFrameArray[i].castShadow);
+    console.log(rFrameArray[i].castShadow);
 	min = min - 200;
 }
 
@@ -425,25 +427,40 @@ mtlLoader.load( 'Lamp.mtl', function( materials ) {
 });
 
 
-    mtlLoader.load( 'Bed.mtl', function( materials ) {
-	materials.preload();
-	var objLoader = new THREE.OBJLoader();
-	objLoader.setMaterials( materials );
-	objLoader.setPath( 'obj/' );
-	objLoader.load( 'Bed.obj', function ( object ) {
-		
-		object.position.set(-450,-50,300);
+mtlLoader.load( 'Bed.mtl', function( materials ) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials( materials );
+    objLoader.setPath( 'obj/' );
+    objLoader.load( 'Bed.obj', function ( object ) {
+	   object.position.set(-450,-50,300);
         //object.rotation.x = Math.PI * 90/180;
         object.rotation.y = Math.PI * 90/180;
-		object.scale.set(1.5,1.5,1.5);
+	   object.scale.set(1.5,1.5,1.5);
         object.castShadow = true;
         object.receiveShadow = true;
         collidableMeshList.push(object);
-		scene.add( object );
-	}, onProgress, onError );
+	   scene.add( object );
+    }, onProgress, onError );
 });
 
+// little cube to test lights
+cube = new THREE.BoxGeometry(20,20,20,20);
+var testCube = new THREE.Mesh(cube, cubeMat);
+testCube.position.set(0,0,0);
+testCube.receiveShadow = true;
+testCube.castShadow = true;
+collidableMeshList.push(testCube);
+scene.add(testCube);
 
+// little cube to test lights on wall
+cube = new THREE.BoxGeometry(20,20,20,20);
+var testCube2 = new THREE.Mesh(cube, cubeMat);
+testCube2.position.set(250,0,-500);
+testCube2.receiveShadow = true;
+testCube2.castShadow = true;
+collidableMeshList.push(testCube2);
+scene.add(testCube2);
 
 
 //scene.add(camera);
