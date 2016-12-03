@@ -309,7 +309,6 @@ for (i = 0; i < doorsArray.length; i++){
     // Right door right side
     else if (doorCounter > 8 && doorCounter <= 13){
         if (rRSideEdited == false){
-            console.log("These are right door right side");
             minZ = 225;
             rRSideEdited = true;
         }
@@ -322,11 +321,7 @@ for (i = 0; i < doorsArray.length; i++){
     minZ = minZ - 200;
     doorsArray[i].castShadow = true;
     doors.add(doorsArray[i]);     
-    doorCounter++;
-    
-    console.log(doorsArray[i].position);
-    console.log(doorCounter);
-    
+    doorCounter++;    
 }
 
 scene.add(doors);
@@ -385,6 +380,13 @@ var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:fal
 var character = new THREE.Mesh( cubeGeometry, wireMaterial );
 character.position.set(0,0,0);
 scene.add( character );	
+
+// Define interaction cube
+cubeGeometry = new THREE.CubeGeometry(0.1,0.1,0.1,1,1,1);
+wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
+var interactionCube = new THREE.Mesh( cubeGeometry, wireMaterial );
+interactionCube.position.set(0,0,-10);
+scene.add(interactionCube);
 
 
 var onProgress = function ( xhr ) {

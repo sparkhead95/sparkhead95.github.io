@@ -93,7 +93,7 @@ var prevTime = performance.now();
 var velocity = new THREE.Vector3();
 
 controls = new THREE.PointerLockControls( camera );
-controls.getObject().position.set( 0, 50, 400);
+controls.getObject().position.set( 0, -50, 400);
 scene.add( controls.getObject() );
 
 var onKeyDown = function ( event ) {
@@ -172,6 +172,10 @@ var onKeyDown = function ( event ) {
                     var lastFreeY;
                     var lastFreeZ;
                 
+
+// Interaction with objects. We'll have an invisible cube in front of the player at all times. If the cube collides with an object, and the character presses "E", that object will 'interact'. Definition of the cube is in the custom.js
+
+
 
 
 function animate() {
@@ -304,6 +308,7 @@ function animate() {
                     //console.log(controls.getObject().position);
                     var pos = (controls.getObject().position);
                     character.position.set(pos.x,pos.y,pos.z);
+                    interactionCube.position.set(pos.x,pos.y, pos.z - 1);
                     //console.log(character.position);
                 
 					prevTime = time;
