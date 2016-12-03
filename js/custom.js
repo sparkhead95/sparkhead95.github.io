@@ -241,7 +241,7 @@ scene.add(rightTFrame);
 
 
 // Final door Frame
-var cube = new THREE.BoxGeometry(500,200,5,8);
+var cube = new THREE.BoxGeometry(500,200,20,8);
 finalLFrame = new THREE.Mesh(cube, cubeMat); 
 finalRFrame = new THREE.Mesh(cube, cubeMat); 
 finalTFrame = new THREE.Mesh(cube, cubeMat); 
@@ -342,7 +342,7 @@ for (i = 0; i < corridorLightsArray.length; i++){
     corridorLightsArray[i].target.position.set(0,0,min);
     min = min - 200;
     corridorLightsArray[i].penumbra = 1;
-    corridorLightsArray[i].angle = 0.5;
+    corridorLightsArray[i].angle = 1;
     corridorLightsArray[i].castShadow = true;
     corridorLightsArray[i].intensity = 0.7;
     corridorLightsArray[i].target.updateMatrixWorld();
@@ -377,7 +377,7 @@ fallenLamp.angle = 0.25;
 fallenLamp.castShadow = true;
 fallenLamp.intensity = 1;
 fallenLamp.target.updateMatrixWorld();
-scene.add(fallenLamp);
+//scene.add(fallenLamp);
 //spotLightHelper = new THREE.SpotLightHelper(fallenLamp);
 //scene.add(spotLightHelper);
 
