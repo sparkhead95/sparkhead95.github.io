@@ -268,12 +268,68 @@ leftDoor.receiveShadow = true;
 scene.add(leftDoor);
 
 var rightDoor = new THREE.Mesh(cube, cubeMat);
-rightDoor.position.set(26,0,-344);
-rightDoor.rotation.y = Math.PI * 13/180;
+rightDoor.position.set(27,0,-337);
+rightDoor.rotation.y = Math.PI * 30/180;
 collidableMeshList.push(rightDoor);
 rightDoor.castShadow = true;
 rightDoor.receiveShadow = true;
 scene.add(rightDoor);
+
+
+// Let's make all of the doors
+var lDoor1, lDoor2, lDoor3, lDoor4, lDoor5, lDoor6, rDoor1, rDoor2, rDoor3, rDoor4, rDoor5, rDoor6; // If the door is preceeded by 1, it's the left door.
+var doorsArray = [lDoor1, lDoor2, lDoor3, lDoor4, lDoor5, lDoor6, rDoor1, rDoor2, rDoor3, rDoor4, rDoor5, rDoor6];
+doors = new THREE.Object3D();
+var minZ = 225; //Where the left door array starts for left side corridor. Further down the corridor means a lower number than this.
+var minX = -100; // Same as above but for X axis.
+var rLSideEdited = false;
+var lRSideEdited = false;
+var rRSideEdited = false;
+
+var doorCounter = 0;
+
+for (i = 0; i < doorsArray.length; i++){
+    // Right door left side
+    if (doorCounter > 2 && doorCounter <= 5){
+        if (rLSideEdited == false){
+            minZ = 175;
+            rLSideEdited = true;
+        }
+    }
+    
+    // Left door right side
+    else if (doorCounter > 5 && doorCounter <= 8){
+        if (lRSideEdited == false){
+            minZ = 175;
+            minX = 100;
+            lRSideEdited = true;
+        }
+    }
+    
+    // Right door right side
+    else if (doorCounter > 8 && doorCounter <= 13){
+        if (rRSideEdited == false){
+            console.log("These are right door right side");
+            minZ = 225;
+            rRSideEdited = true;
+        }
+    }
+    
+    doorsArray[i] = new THREE.Mesh(cube, cubeMat);
+    doorsArray[i].position.set(minX,0,minZ);
+    doorsArray[i].rotation.y = Math.PI * 90/180;
+    collidableMeshList.push(doorsArray[i]);
+    minZ = minZ - 200;
+    doorsArray[i].castShadow = true;
+    doors.add(doorsArray[i]);     
+    doorCounter++;
+    
+    console.log(doorsArray[i].position);
+    console.log(doorCounter);
+    
+}
+
+scene.add(doors);
 
 
 
@@ -309,7 +365,7 @@ fallenLamp.target.position.set(45,0,-340);
 fallenLamp.penumbra = 1;
 fallenLamp.angle = 0.25;
 fallenLamp.castShadow = true;
-fallenLamp.intensity = 2;
+fallenLamp.intensity = 1;
 fallenLamp.target.updateMatrixWorld();
 scene.add(fallenLamp);
 //spotLightHelper = new THREE.SpotLightHelper(fallenLamp);
@@ -330,7 +386,7 @@ var character = new THREE.Mesh( cubeGeometry, wireMaterial );
 character.position.set(0,0,0);
 scene.add( character );	
 
-/*
+
 var onProgress = function ( xhr ) {
 					if ( xhr.lengthComputable ) {
 						var percentComplete = xhr.loaded / xhr.total * 100;
@@ -351,19 +407,21 @@ var manager = new THREE.LoadingManager();
 
 var mtlLoader = new THREE.MTLLoader();
 mtlLoader.setPath( 'obj/' );
-mtlLoader.load( 'sofa.mtl', function( materials ) {
+mtlLoader.load( 'Lamp.mtl', function( materials ) {
 	materials.preload();
 	var objLoader = new THREE.OBJLoader();
 	objLoader.setMaterials( materials );
 	objLoader.setPath( 'obj/' );
-	objLoader.load( 'sofa.obj', function ( object ) {
-		object.position.y = Math.PI / 2;
-		object.position.set(-150,-50,0);
-		object.scale.set(0.05,0.05,0.05);
+	objLoader.load( 'Lamp.obj', function ( object ) {
+		
+		object.position.set(450,-40,-650);
+        object.rotation.x = Math.PI * 90/180;
+        object.rotation.y = Math.PI * 120/180;
+		//object.scale.set(0.05,0.05,0.05);
 		scene.add( object );
 	}, onProgress, onError );
 });
-*/
+
 
 
 
