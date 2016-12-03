@@ -164,28 +164,28 @@ var onKeyDown = function ( event ) {
 
 				};
 
-				document.addEventListener( 'keydown', onKeyDown, false );
-				document.addEventListener( 'keyup', onKeyUp, false );
+document.addEventListener( 'keydown', onKeyDown, false );
+document.addEventListener( 'keyup', onKeyUp, false );
 
-				raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3(), 0, 10 );
-                    var lastFreeX;
-                    var lastFreeY;
-                    var lastFreeZ;
+
                 
 
 // Interaction with objects. We'll have an invisible cube in front of the player at all times. If the cube collides with an object, and the character presses "E", that object will 'interact'. Definition of the cube is in the custom.js
 
 
 
+raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3(), 0, 10 );
+var lastFreeX;
+var lastFreeY;
+var lastFreeZ;
 
 function animate() {
 
 				requestAnimationFrame( animate );
-
+                
                     
 				if ( controlsEnabled ) {
-                    var originPoint = character.position.clone();
-                    
+                    var originPoint = character.position.clone();                    
                     
 					raycaster.ray.origin.copy( controls.getObject().position );
 					raycaster.ray.origin.y -= 10;
@@ -288,19 +288,19 @@ function animate() {
                     
                     // Handle out of bounds
                     if (controls.getObject().position.x > 560){
-                        controls.getObject().position.x = 0;
+                        resetCharacter(controls.getObject());
                         console.log("X was out positive! Reset character.");
                     }
                     else if (controls.getObject().position.x < -565){
-                        controls.getObject().position.x = 0;
+                        resetCharacter(controls.getObject());
                         console.log("X was out negative! Reset character.");
                     }
                     else if (controls.getObject().position.z > 500){
-                        controls.getObject().position.z = 0;
+                        resetCharacter(controls.getObject());
                         console.log("Z was out positive! Reset character.");
                     }
                     else if (controls.getObject().position.z < -765){
-                        controls.getObject().position.z = 0;
+                        resetCharacter(controls.getObject());
                         console.log("Z was out negative! Reset character.");
                     }
                     
@@ -312,12 +312,18 @@ function animate() {
                     //console.log(character.position);
                 
 					prevTime = time;
-
 				}
 
 				renderer.render( scene, camera );
 
-			}
+}
+
+
+function resetCharacter(character) {
+    character.position.x = 0;
+    character.position.y = 0;
+    character.position.z = 400;
+}
 
 animate();
-controls.getObject().position.set( 0, 50, 400);
+controls.getObject().position.set( 0, 10, 400);

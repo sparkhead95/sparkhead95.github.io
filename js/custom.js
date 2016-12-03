@@ -275,7 +275,7 @@ rightDoor.castShadow = true;
 rightDoor.receiveShadow = true;
 scene.add(rightDoor);
 
-
+/*
 // Let's make all of the doors
 var lDoor1, lDoor2, lDoor3, lDoor4, lDoor5, lDoor6, rDoor1, rDoor2, rDoor3, rDoor4, rDoor5, rDoor6; // If the door is preceeded by 1, it's the left door.
 var doorsArray = [lDoor1, lDoor2, lDoor3, lDoor4, lDoor5, lDoor6, rDoor1, rDoor2, rDoor3, rDoor4, rDoor5, rDoor6];
@@ -325,7 +325,7 @@ for (i = 0; i < doorsArray.length; i++){
 }
 
 scene.add(doors);
-
+*/
 
 
 var spotLight1, spotLight2, spotLight3, spotLight4;
@@ -420,6 +420,25 @@ mtlLoader.load( 'Lamp.mtl', function( materials ) {
         object.rotation.x = Math.PI * 90/180;
         object.rotation.y = Math.PI * 120/180;
 		//object.scale.set(0.05,0.05,0.05);
+		scene.add( object );
+	}, onProgress, onError );
+});
+
+
+    mtlLoader.load( 'Bed.mtl', function( materials ) {
+	materials.preload();
+	var objLoader = new THREE.OBJLoader();
+	objLoader.setMaterials( materials );
+	objLoader.setPath( 'obj/' );
+	objLoader.load( 'Bed.obj', function ( object ) {
+		
+		object.position.set(-450,-50,300);
+        //object.rotation.x = Math.PI * 90/180;
+        object.rotation.y = Math.PI * 90/180;
+		object.scale.set(1.5,1.5,1.5);
+        object.castShadow = true;
+        object.receiveShadow = true;
+        collidableMeshList.push(object);
 		scene.add( object );
 	}, onProgress, onError );
 });
