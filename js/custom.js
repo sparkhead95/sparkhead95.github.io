@@ -488,13 +488,6 @@ var character = new THREE.Mesh(cubeGeometry, wireMaterial);
 character.position.set(0, 0, 0);
 scene.add(character);
 
-var sound1 = new THREE.PositionalAudio( listener );
-				audioLoader.load( 'sounds/steps.ogg', function( buffer ) {
-					sound1.setBuffer( buffer );
-					sound1.setRefDistance( 20 );
-					sound1.play();
-				});
-				character.add( sound1 );
 
 
 /*

@@ -274,6 +274,32 @@ function onMouseMove(event) {
 
 }
 
+var musicPaused = false;
+
+
+var sound1 = new THREE.PositionalAudio( listener );
+				audioLoader.load( 'sounds/steps.ogg', function( buffer ) {
+					sound1.setBuffer( buffer );
+					sound1.setRefDistance( 20 );
+					sound1.play();
+				});
+				character.add( sound1 );
+
+
+function pauseMusic(){
+    if (!musicPaused){
+        sound1.pause();
+        musicPaused = true; 
+    } 
+}
+
+function playMusic(){
+    if (musicPaused){
+        sound1.play();
+        musicPaused = false; 
+    } 
+}
+
 
 function animate() {
     stats.begin();
@@ -409,6 +435,20 @@ function animate() {
         rayRAY.ray.direction.set(controls.getObject().rotation);
         rayRAY.setFromCamera(mouse, camera);
 
+        
+        
+        console.log(originPoint);
+        console.log(controls.getObject().position);
+        if (controls.getObject().position == originPoint){
+            
+            // This means we stopped moving. So:
+            pauseMusic();
+        }
+        else{
+            console.log("Moving");
+            playMusic();
+        }
+        
 
         var testCollisionResults = rayRAY.intersectObjects(collidableMeshList);
         // For all collisions
