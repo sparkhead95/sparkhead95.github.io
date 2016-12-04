@@ -315,13 +315,15 @@ leftDoor.castShadow = true;
 leftDoor.receiveShadow = true;
 scene.add(leftDoor);
 
-var rightDoor = new THREE.Mesh(cube, cubeMat);
-rightDoor.position.set(5, 0, -362); //Z should be -345
-rightDoor.rotation.y = Math.PI * 90 / 180;
+cubeFinal = new THREE.BoxGeometry(50, 100, 5, 8);
+cubeFinal.translate(-25,0,0);
+var rightDoor = new THREE.Mesh(cubeFinal, cubeMat);
+rightDoor.position.set(50, 0, -375); //Z should be -345
+rightDoor.rotation.y = Math.PI * 15 / 360;
 collidableMeshList.push(rightDoor);
 rightDoor.castShadow = true;
 rightDoor.receiveShadow = true;
-//oppositeDoorIDs.push(rightDoor.id);
+oppositeDoorIDs.push(rightDoor.id);
 scene.add(rightDoor);
 
 
