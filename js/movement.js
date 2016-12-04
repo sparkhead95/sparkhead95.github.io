@@ -5,6 +5,7 @@ var controls;
 var blocker = document.getElementById('blocker');
 var instructions = document.getElementById('instructions');
 var objects = [];
+var animating = false;
 
 objects.push(floor);
 
@@ -148,12 +149,12 @@ var onKeyUp = function (event) {
         moveForward = false;
         break;
 
-            
+
     case 69: // E        
-        interactable = true;
+        interactable = false;
         break;
-            
-            
+
+
     case 37: // left
     case 65: // a
         moveLeft = false;
@@ -190,20 +191,40 @@ function resetCharacter(character) {
 // Interaction with objects. We'll have an invisible cube in front of the player at all times. If the cube collides with an object, and the character presses "E", that object will 'interact'. Definition of the cube is in the custom.js
 
 function openDoor(door) {
-var i = 0;
+
+    var i = 0;
+    //console.log(oppositeDoorIDs);
     var animateDoor = setInterval(function () {
-    
+
         if (i < 100) {
-            door.rotation.y -= Math.PI * 1 / 180;
-            i++;
-        }
-        else {
+            if (oppositeDoorIDs.includes(door.id)) {
+                if (door.name == "closed") {
+                    door.rotation.y += Math.PI * 1 / 180;
+                    i++;
+                } else {
+                    door.rotation.y -= Math.PI * 1 / 180;
+                    i++;
+                }
+            } else {
+                if (door.name == "closed") {
+                    door.rotation.y -= Math.PI * 1 / 180;
+                    i++;
+                } else {
+                    door.rotation.y += Math.PI * 1 / 180;
+                    i++;
+                }
+            }
+
+        } else {
             clearInterval(animateDoor);
+            animating = false;
+            if (door.name == "closed") {
+                door.name = "open";
+            } else {
+                door.name = "closed";
+            }
         }
-    }, 80)
-    console.log("Done");
-
-
+    }, 40)
 }
 
 
@@ -369,19 +390,25 @@ function animate() {
 
         var testCollisionResults = rayRAY.intersectObjects(collidableMeshList);
         for (var i = 0; i < testCollisionResults.length; i++) {
-            if (interactable){
+            if (interactable) {
                 //testCollisionResults[i].object.position.y += 15;
-                openDoor(testCollisionResults[i].object);
+                if (!animating) {
+                    openDoor(testCollisionResults[i].object);
+                    //console.log(testCollisionResults[i].object);
+                    animating = true;
+                    interactable = false;
+                }
+
                 //console.log(testCollisionResults[i].object);
-                interactable = false;
+
             }
-            
+
         }
 
 
-        
-        
-        
+
+
+
 
 
 

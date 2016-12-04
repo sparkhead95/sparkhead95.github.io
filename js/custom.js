@@ -15,8 +15,10 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 var scene = new THREE.Scene();
 
+/*
 var axis = new THREE.AxisHelper(10);
 scene.add(axis);
+*/
 
 var collidableMeshList = [];
 
@@ -296,6 +298,8 @@ finalLFrame.receiveShadow = true;
 scene.add(finalLFrame);
 scene.add(finalTFrame);
 scene.add(finalRFrame);
+var oppositeDoorIDs = [];
+
 
 // Final door
 cube = new THREE.BoxGeometry(50, 100, 5, 8);
@@ -305,18 +309,19 @@ cubeMat = new THREE.MeshPhongMaterial({
     side: THREE.DoubleSide
 });
 var leftDoor = new THREE.Mesh(cube, cubeMat);
-leftDoor.position.set(-25, 0, -350);
+leftDoor.position.set(-50, 0, -375);
 collidableMeshList.push(leftDoor);
 leftDoor.castShadow = true;
 leftDoor.receiveShadow = true;
 scene.add(leftDoor);
 
 var rightDoor = new THREE.Mesh(cube, cubeMat);
-rightDoor.position.set(27, 0, -305); //Z should be -345
-rightDoor.rotation.y = Math.PI * 15 / 180;
+rightDoor.position.set(5, 0, -362); //Z should be -345
+rightDoor.rotation.y = Math.PI * 90 / 180;
 collidableMeshList.push(rightDoor);
 rightDoor.castShadow = true;
 rightDoor.receiveShadow = true;
+//oppositeDoorIDs.push(rightDoor.id);
 scene.add(rightDoor);
 
 
@@ -328,6 +333,7 @@ var minZ = 225; //Where the left door array starts for left side corridor. Furth
 var minX = -100; // Same as above but for X axis.
 var resetAxis = false;
 
+
 var doorCounter = 0;
 
 for (i = 0; i < doorsArray.length; i++) {
@@ -337,12 +343,17 @@ for (i = 0; i < doorsArray.length; i++) {
             minX = 100;
             minZ = 225;
             resetAxis = true;
+            
         }
     }
 
     doorsArray[i] = new THREE.Mesh(cube, cubeMat);
     doorsArray[i].position.set(minX, 0, minZ);
     doorsArray[i].rotation.y = Math.PI * 90 / 180;
+    if (!resetAxis){
+        oppositeDoorIDs.push(doorsArray[i].id);
+    }
+    doorsArray[i].name = "closed";
 
     collidableMeshList.push(doorsArray[i]);
     minZ = minZ - 200;
@@ -452,7 +463,7 @@ scene.add(fallenBulb);
 var camera = new THREE.PerspectiveCamera(90, width / height, 0.1, 1000);
 camera.rotation.x = Math.PI * 90 / 180;
 
-var ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+var ambientLight = new THREE.AmbientLight(0xffffff, 0.02);
 scene.add(ambientLight);
 
 
