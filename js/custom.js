@@ -15,6 +15,11 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 var scene = new THREE.Scene();
 
+var listener = new THREE.AudioListener();
+
+
+var audioLoader = new THREE.AudioLoader();
+
 /*
 var axis = new THREE.AxisHelper(10);
 scene.add(axis);
@@ -467,6 +472,8 @@ scene.add(fallenBulb);
 var camera = new THREE.PerspectiveCamera(90, width / height, 0.1, 1000);
 camera.rotation.x = Math.PI * 90 / 180;
 
+camera.add( listener );
+
 var ambientLight = new THREE.AmbientLight(0xffffff, 0.02);
 scene.add(ambientLight);
 
@@ -480,6 +487,15 @@ var wireMaterial = new THREE.MeshBasicMaterial({
 var character = new THREE.Mesh(cubeGeometry, wireMaterial);
 character.position.set(0, 0, 0);
 scene.add(character);
+
+var sound1 = new THREE.PositionalAudio( listener );
+				audioLoader.load( 'sounds/steps.ogg', function( buffer ) {
+					sound1.setBuffer( buffer );
+					sound1.setRefDistance( 20 );
+					sound1.play();
+				});
+				character.add( sound1 );
+
 
 /*
 // Define interaction cube

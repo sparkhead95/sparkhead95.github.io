@@ -228,20 +228,25 @@ function openDoor(door) {
 }
 
 function itsLocked(){
+    
+    console.log("Called");
     var lockedText = document.createElement('h2');
-        lockedText.style.position = 'absolute';
-        lockedText.style.width = 200;
-        lockedText.style.height = 100;
-        lockedText.style.backgroundColor = "transparent";
-        lockedText.style.color = "white";
-        lockedText.innerHTML = "It's locked!";
-        lockedText.style.top = width / 2;
-        lockedText.style.left = width /2;
-        document.body.appendChild(lockedText); 
+    lockedText.style.position = 'absolute';
+    lockedText.style.width = 200;
+    lockedText.style.height = 100;
+    lockedText.style.backgroundColor = "transparent";
+    lockedText.style.color = "white";
+    lockedText.innerHTML = "It's locked!";
+    lockedText.style.top = width / 2;
+    lockedText.style.left = width /2;
+    document.body.appendChild(lockedText); 
     
     setTimeout(function(){
        document.body.removeChild(lockedText);   
-    }, 3000);    
+    }, 3000); 
+    
+    
+    
 }
 
 
