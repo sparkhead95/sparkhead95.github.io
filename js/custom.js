@@ -313,6 +313,7 @@ leftDoor.position.set(-50, 0, -375);
 collidableMeshList.push(leftDoor);
 leftDoor.castShadow = true;
 leftDoor.receiveShadow = true;
+leftDoor.name = "locked";
 scene.add(leftDoor);
 
 cubeFinal = new THREE.BoxGeometry(50, 100, 5, 8);
@@ -323,6 +324,7 @@ rightDoor.rotation.y = Math.PI * 15 / 360;
 collidableMeshList.push(rightDoor);
 rightDoor.castShadow = true;
 rightDoor.receiveShadow = true;
+rightDoor.name = "closed";
 oppositeDoorIDs.push(rightDoor.id);
 scene.add(rightDoor);
 
@@ -407,7 +409,7 @@ for (i = 0; i < lightsArray.length; i++) {
     if (expandLightRadius) {
         lightsArray[i].angle = 1;
     } else {
-        lightsArray[i].angle = 0.7;
+        lightsArray[i].angle = 0.8;
     }
 
     lightsArray[i].castShadow = true;

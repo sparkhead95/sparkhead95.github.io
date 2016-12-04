@@ -227,6 +227,23 @@ function openDoor(door) {
     }, 40)
 }
 
+function itsLocked(){
+    var lockedText = document.createElement('h2');
+        lockedText.style.position = 'absolute';
+        lockedText.style.width = 200;
+        lockedText.style.height = 100;
+        lockedText.style.backgroundColor = "transparent";
+        lockedText.style.color = "white";
+        lockedText.innerHTML = "It's locked!";
+        lockedText.style.top = width / 2;
+        lockedText.style.left = width /2;
+        document.body.appendChild(lockedText); 
+    
+    setTimeout(function(){
+       document.body.removeChild(lockedText);   
+    }, 3000);    
+}
+
 
 raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 10);
 var rayRAY = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 30);
@@ -389,17 +406,25 @@ function animate() {
 
 
         var testCollisionResults = rayRAY.intersectObjects(collidableMeshList);
+        // For all collisions
         for (var i = 0; i < testCollisionResults.length; i++) {
+            // Check whether we can interact with the object (whether E is pressed)
             if (interactable) {
-                //testCollisionResults[i].object.position.y += 15;
+                // Check whether we're already animating
                 if (!animating) {
-                    openDoor(testCollisionResults[i].object);
-                    //console.log(testCollisionResults[i].object);
-                    animating = true;
-                    interactable = false;
+                    // Check whether it's a door
+                    if (testCollisionResults[i].object.name == "closed" || testCollisionResults[i].object.name == "open") {
+                        openDoor(testCollisionResults[i].object);
+                        animating = true;
+                        interactable = false;
+                    }
+                    // Check whether it's locked (might not be a door)
+                    if (testCollisionResults[i].object.name == "locked"){
+                        itsLocked();
+                    }
                 }
 
-                //console.log(testCollisionResults[i].object);
+               
 
             }
 
