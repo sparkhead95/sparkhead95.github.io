@@ -89,6 +89,7 @@ var moveLeft = false;
 var moveRight = false;
 var shiftRun = false;
 var canJump = false;
+var interactable = false;
 var prevTime = performance.now();
 var velocity = new THREE.Vector3();
 
@@ -104,6 +105,11 @@ var onKeyDown = function (event) {
     case 87: // w
         moveForward = true;
         break;
+
+
+    case 69: // E        
+        interactable = true;
+        break
 
     case 37: // left
     case 65: // a
@@ -142,6 +148,12 @@ var onKeyUp = function (event) {
         moveForward = false;
         break;
 
+            
+    case 69: // E        
+        interactable = true;
+        break;
+            
+            
     case 37: // left
     case 65: // a
         moveLeft = false;
@@ -168,14 +180,35 @@ var onKeyUp = function (event) {
 document.addEventListener('keydown', onKeyDown, false);
 document.addEventListener('keyup', onKeyUp, false);
 
-
+function resetCharacter(character) {
+    character.position.x = 0;
+    character.position.y = 0;
+    character.position.z = 400;
+}
 
 
 // Interaction with objects. We'll have an invisible cube in front of the player at all times. If the cube collides with an object, and the character presses "E", that object will 'interact'. Definition of the cube is in the custom.js
 
+function openDoor(door) {
+var i = 0;
+    var animateDoor = setInterval(function () {
+    
+        if (i < 100) {
+            door.rotation.y -= Math.PI * 1 / 180;
+            i++;
+        }
+        else {
+            clearInterval(animateDoor);
+        }
+    }, 80)
+    console.log("Done");
+
+
+}
 
 
 raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 10);
+var rayRAY = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 30);
 var lastFreeX;
 var lastFreeY;
 var lastFreeZ;
@@ -185,12 +218,27 @@ var stats = new Stats();
 stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom);
 
+var mouse = new THREE.Vector2();
+
+
+function onMouseMove(event) {
+
+    // calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+}
 
 
 function animate() {
     stats.begin();
     requestAnimationFrame(animate);
     if (controlsEnabled) {
+
+
+
         var originPoint = character.position.clone();
         setInterval(function () {
             if (lightOn) {
@@ -222,7 +270,7 @@ function animate() {
             var collisionResults = ray.intersectObjects(collidableMeshList);
             if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
                 hit = true;
-                console.log("hit");
+                //console.log("hit");
             }
         }
 
@@ -314,6 +362,33 @@ function animate() {
         //interactionCube.position.set(pos.x,pos.y, pos.z - 1);
         //console.log(character.position);
 
+        rayRAY.ray.origin.set(controls.getObject().position);
+        rayRAY.ray.direction.set(controls.getObject().rotation);
+        rayRAY.setFromCamera(mouse, camera);
+
+
+        var testCollisionResults = rayRAY.intersectObjects(collidableMeshList);
+        for (var i = 0; i < testCollisionResults.length; i++) {
+            if (interactable){
+                //testCollisionResults[i].object.position.y += 15;
+                openDoor(testCollisionResults[i].object);
+                //console.log(testCollisionResults[i].object);
+                interactable = false;
+            }
+            
+        }
+
+
+        
+        
+        
+
+
+
+
+        //console.log(ray);
+        //console.log(controls.getObject().rotation.y);
+
         prevTime = time;
 
 
@@ -324,11 +399,7 @@ function animate() {
 }
 
 
-function resetCharacter(character) {
-    character.position.x = 0;
-    character.position.y = 0;
-    character.position.z = 400;
-}
+
 
 animate();
 controls.getObject().position.set(0, 10, 400);

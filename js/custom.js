@@ -299,6 +299,7 @@ scene.add(finalRFrame);
 
 // Final door
 cube = new THREE.BoxGeometry(50, 100, 5, 8);
+cube.translate(25,0,0);
 cubeMat = new THREE.MeshPhongMaterial({
     color: 0x7A5230,
     side: THREE.DoubleSide
@@ -323,7 +324,7 @@ scene.add(rightDoor);
 var Door1, Door2, Door3, Door4, Door5, Door6; // 1 to 3 is left side, 4 to 6 is right
 var doorsArray = [Door1, Door2, Door3, Door4, Door5, Door6];
 doors = new THREE.Object3D();
-var minZ = 200; //Where the left door array starts for left side corridor. Further down the corridor means a lower number than this.
+var minZ = 225; //Where the left door array starts for left side corridor. Further down the corridor means a lower number than this.
 var minX = -100; // Same as above but for X axis.
 var resetAxis = false;
 
@@ -334,15 +335,15 @@ for (i = 0; i < doorsArray.length; i++) {
     if (doorCounter > 2) {
         if (!resetAxis) {
             minX = 100;
-            minZ = 200;
+            minZ = 225;
             resetAxis = true;
         }
     }
 
-
     doorsArray[i] = new THREE.Mesh(cube, cubeMat);
     doorsArray[i].position.set(minX, 0, minZ);
     doorsArray[i].rotation.y = Math.PI * 90 / 180;
+
     collidableMeshList.push(doorsArray[i]);
     minZ = minZ - 200;
     doorsArray[i].castShadow = true;
