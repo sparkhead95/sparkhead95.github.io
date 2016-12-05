@@ -708,9 +708,8 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
 });
 
 
-var wardrobe = new THREE.Object3D;
 minZ = 340;
-var myObjects;
+var wardrobes;
 
 // Load closed wardrobe
 mtlLoader.load('closedWardrobe.mtl', function (materials) {
@@ -719,20 +718,28 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('closedWardrobe.obj', function (object) {
-        object.position.set(-300, -45, minZ);
-        object.rotation.y = Math.PI;
-        object.scale.set(1.5, 1.5, 1.5);
-        object.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-                child.geometry.computeVertexNormals();
-                collidableMeshList.push(child);
-            }
-        })
-        scene.add(object);
+        wardrobes = [object.clone(), object.clone(), object.clone()];
+        for (i = 0; i < wardrobes.length; i++) {
+            wardrobes[i].position.set(-300, -45, minZ);
+            wardrobes[i].rotation.y = Math.PI;
+            wardrobes[i].scale.set(1.5, 1.5, 1.5);
+            wardrobes[i].traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.geometry.computeVertexNormals();
+                    collidableMeshList.push(child);
+                }
+            })
+            scene.add(wardrobes[i]);
+            minZ = minZ - 250;
+        }
+
     }, onProgress, onError);
 });
+
+console.log(wardrobes[2].position);
+//wardrobes[2].position.z -= 50;
 
 /*
 for (i = 0; i < myObjects.length; i++) {

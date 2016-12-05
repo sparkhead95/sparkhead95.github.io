@@ -191,7 +191,7 @@ function resetCharacter(character) {
 // Interaction with objects. We'll have an invisible cube in front of the player at all times. If the cube collides with an object, and the character presses "E", that object will 'interact'. Definition of the cube is in the custom.js
 
 var doorMove = new THREE.PositionalAudio(listener);
-console.log("Playing..");
+//console.log("Playing..");
 audioLoader.load('sounds/door.ogg', function (buffer) {
     doorMove.setBuffer(buffer);
     doorMove.setRefDistance(20);
