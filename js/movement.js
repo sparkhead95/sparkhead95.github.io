@@ -274,6 +274,20 @@ document.body.appendChild(stats.dom);
 
 var mouse = new THREE.Vector2();
 
+function OpenLiftDoors() {
+    var i = 0;
+    var animateDoor = setInterval(function () {
+        if (i < 200) {
+            liftLeftDoor.position.x -= Math.PI * 10 / 180;
+            liftRightDoor.position.x += Math.PI * 10 / 180;
+            i++;
+        } else {
+            clearInterval(animateDoor);
+        }
+    }, 10);
+}
+
+
 
 function onMouseMove(event) {
 
@@ -318,9 +332,6 @@ function animate() {
     stats.begin();
     requestAnimationFrame(animate);
     if (controlsEnabled) {
-
-
-
         var originPoint = character.position.clone();
         setInterval(function () {
             if (lightOn) {
@@ -480,16 +491,17 @@ function animate() {
                         itsLocked();
                     }
                 }
-
-
-
             }
-
         }
 
 
 
-
+        if (freshStart) {
+            console.log("Moving char");
+            controls.getObject().position.set(0, 0, 400);
+            OpenLiftDoors();
+            freshStart = false;
+        }
 
 
 

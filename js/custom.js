@@ -20,6 +20,8 @@ var listener = new THREE.AudioListener();
 
 var audioLoader = new THREE.AudioLoader();
 
+var freshStart = true; // To mark the start of a new game, for setting initial coords.
+
 /*
 var axis = new THREE.AxisHelper(10);
 scene.add(axis);
@@ -59,7 +61,7 @@ var floorMat = new THREE.MeshPhongMaterial({
 });
 floorMat.normalScale.set(0.2, 0.2);
 var floor = new THREE.Mesh(floorGeo, floorMat);
-floor.position.set(0, -50, 100);
+floor.position.set(0, -50, -522.5);
 floor.rotation.x = Math.PI * 90 / 180;
 floor.castShadow = true;
 floor.receiveShadow = true;
@@ -139,6 +141,88 @@ fRWall.receiveShadow = true;
 fRWall.castShadow = true;
 collidableMeshList.push(fRWall);
 scene.add(fRWall);
+
+// Lift threshold
+liftThreshCube = new THREE.BoxGeometry(100, 5, 5, 8);
+var cubeMat = new THREE.MeshPhongMaterial({
+    color: 0x88898,
+    side: THREE.DoubleSide
+});
+var liftThreshold = new THREE.Mesh(liftThreshCube, cubeMat);
+liftThreshold.position.set(0, -50, 355);
+liftThreshold.rotation.x = Math.PI * 90 / 180;
+liftThreshold.receiveShadow = true;
+liftThreshold.castShadow = true;
+scene.add(liftThreshold);
+
+// Lift floor
+liftFloorCube = new THREE.BoxGeometry(100, 200, 5, 8);
+var cubeMat = new THREE.MeshPhongMaterial({
+    color: 0x88898,
+    side: THREE.DoubleSide
+});
+var liftFloor = new THREE.Mesh(liftFloorCube, cubeMat);
+liftFloor.position.set(0, -50, 455);
+liftFloor.rotation.x = Math.PI * 90 / 180;
+liftFloor.receiveShadow = true;
+liftFloor.castShadow = true;
+scene.add(liftFloor);
+
+var liftRoof = new THREE.Mesh(liftFloorCube, cubeMat);
+liftRoof.position.set(0, 50, 455);
+liftRoof.rotation.x = Math.PI * 90 / 180;
+liftRoof.receiveShadow = true;
+liftRoof.castShadow = true;
+scene.add(liftRoof);
+
+
+// Lift roof cover
+cube = new THREE.BoxGeometry(100, 100, 5, 8);
+var liftRoofCover = new THREE.Mesh(cube, cubeMat);
+liftRoofCover.position.set(0, 100, 350);
+liftRoofCover.receiveShadow = true;
+liftRoofCover.castShadow = true;
+collidableMeshList.push(liftRoofCover);
+scene.add(liftRoofCover);
+
+
+
+// front right wall
+cube = new THREE.BoxGeometry(55, 200, 5, 8);
+var fRWall = new THREE.Mesh(cube, cubeMat);
+fRWall.position.set(75, 0, 350);
+fRWall.receiveShadow = true;
+fRWall.castShadow = true;
+collidableMeshList.push(fRWall);
+scene.add(fRWall);
+
+// Define lift Doors
+cube = new THREE.BoxGeometry(50, 100, 5, 8);
+cubeMat = new THREE.MeshPhongMaterial({
+    color: 0x848484,
+    side: THREE.DoubleSide
+});
+var liftLeftDoor = new THREE.Mesh(cube, cubeMat);
+liftLeftDoor.position.set(-25, 0, 355);
+collidableMeshList.push(liftLeftDoor);
+liftLeftDoor.castShadow = true;
+liftLeftDoor.receiveShadow = true;
+liftLeftDoor.name = "liftL";
+scene.add(liftLeftDoor);
+
+var liftRightDoor = new THREE.Mesh(cube, cubeMat);
+liftRightDoor.position.set(25, 0, 355); //Z should be -345
+collidableMeshList.push(liftRightDoor);
+liftRightDoor.castShadow = true;
+liftRightDoor.receiveShadow = true;
+liftRightDoor.name = "liftR";
+scene.add(liftRightDoor);
+
+
+cubeMat = new THREE.MeshPhongMaterial({
+    color: 0x88898,
+    side: THREE.DoubleSide
+});
 
 
 // Far left wall
@@ -313,6 +397,7 @@ cubeMat = new THREE.MeshPhongMaterial({
     color: 0x7A5230,
     side: THREE.DoubleSide
 });
+
 var leftDoor = new THREE.Mesh(cube, cubeMat);
 leftDoor.position.set(-50, 0, -375);
 collidableMeshList.push(leftDoor);
@@ -406,7 +491,12 @@ for (i = 0; i < lightsArray.length; i++) {
 
     lightsArray[i] = new THREE.SpotLight(0xFFffff, 0.7); // Tell JS what the light is
     //pointLightsArray[i] = new THREE.PointLight( 0xFFffff, 2, 100 );
-    lightsArray[i].position.set(minX, 80, min);
+    if (i == 0) {
+        lightsArray[i].position.set(minX, 45, min);
+    } else {
+        lightsArray[i].position.set(minX, 80, min);
+    }
+
     //pointLightsArray[i].position.set(minX,95,min);
     lightsArray[i].target.position.set(minX, 0, min);
     min = min - 230;
@@ -649,21 +739,21 @@ for (i = 0; i < 9; i++) {
         objLoader.load('ceilingLight.obj', function (object) {
 
             if (min < -320) {
-                console.log("Reached the end");
+                //console.log("Reached the end");
                 if (innerCounter == 0) {
-                    console.log("Setting to left side");
+                    //console.log("Setting to left side");
                     min = 220;
                     minX = -350;
                     innerCounter++;
                 } else if (innerCounter == 1) {
-                    console.log("Setting to right side");
+                    //console.log("Setting to right side");
                     min = 220;
                     minX = 350;
                 }
             }
 
             object.position.set(minX, 80, min);
-            console.log(object.position);
+            //console.log(object.position);
             min = min - 230;
             //object.rotation.y = Math.PI * 90/180;
             //object.scale.set(1.5,1.5,1.5);
