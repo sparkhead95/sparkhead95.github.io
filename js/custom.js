@@ -683,6 +683,7 @@ for (i = 0; i < 9; i++) {
 }
 
 
+
 var pointLight1 = new THREE.PointLight(0xFFffff, 0.7, 100);
 pointLight1.position.set(-350, 60, 220);
 scene.add(pointLight1);
