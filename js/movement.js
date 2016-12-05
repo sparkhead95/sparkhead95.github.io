@@ -190,8 +190,19 @@ function resetCharacter(character) {
 
 // Interaction with objects. We'll have an invisible cube in front of the player at all times. If the cube collides with an object, and the character presses "E", that object will 'interact'. Definition of the cube is in the custom.js
 
-function openDoor(door) {
+var doorMove = new THREE.PositionalAudio(listener);
+console.log("Playing..");
+audioLoader.load('sounds/door.ogg', function (buffer) {
+    doorMove.setBuffer(buffer);
+    doorMove.setRefDistance(20);
 
+});
+
+
+
+function openDoor(door) {
+    door.add(doorMove);
+    doorMove.play();
     var i = 0;
     //console.log(oppositeDoorIDs);
     var animateDoor = setInterval(function () {
@@ -201,7 +212,9 @@ function openDoor(door) {
                 if (door.name == "closed") {
                     door.rotation.y += Math.PI * 1 / 180;
                     i++;
+
                 } else {
+
                     door.rotation.y -= Math.PI * 1 / 180;
                     i++;
                 }
@@ -214,7 +227,6 @@ function openDoor(door) {
                     i++;
                 }
             }
-
         } else {
             clearInterval(animateDoor);
             animating = false;
@@ -227,8 +239,8 @@ function openDoor(door) {
     }, 40)
 }
 
-function itsLocked(){
-    
+function itsLocked() {
+
     console.log("Called");
     var lockedText = document.createElement('h2');
     lockedText.style.position = 'absolute';
@@ -238,15 +250,15 @@ function itsLocked(){
     lockedText.style.color = "white";
     lockedText.innerHTML = "It's locked!";
     lockedText.style.top = width / 2;
-    lockedText.style.left = width /2;
-    document.body.appendChild(lockedText); 
-    
-    setTimeout(function(){
-       document.body.removeChild(lockedText);   
-    }, 3000); 
-    
-    
-    
+    lockedText.style.left = width / 2;
+    document.body.appendChild(lockedText);
+
+    setTimeout(function () {
+        document.body.removeChild(lockedText);
+    }, 3000);
+
+
+
 }
 
 
@@ -276,7 +288,7 @@ function onMouseMove(event) {
 
 var musicPaused = false;
 
-
+/*
 var sound1 = new THREE.PositionalAudio( listener );
 				audioLoader.load( 'sounds/steps.ogg', function( buffer ) {
 					sound1.setBuffer( buffer );
@@ -284,20 +296,22 @@ var sound1 = new THREE.PositionalAudio( listener );
 					sound1.play();
 				});
 				character.add( sound1 );
+*/
 
 
-function pauseMusic(){
-    if (!musicPaused){
+
+function pauseMusic() {
+    if (!musicPaused) {
         sound1.pause();
-        musicPaused = true; 
-    } 
+        musicPaused = true;
+    }
 }
 
-function playMusic(){
-    if (musicPaused){
-        sound1.play();
-        musicPaused = false; 
-    } 
+function playMusic() {
+    if (musicPaused) {
+        //sound1.play();
+        musicPaused = false;
+    }
 }
 
 
@@ -435,20 +449,19 @@ function animate() {
         rayRAY.ray.direction.set(controls.getObject().rotation);
         rayRAY.setFromCamera(mouse, camera);
 
-        
-        
-        console.log(originPoint);
-        console.log(controls.getObject().position);
-        if (controls.getObject().position == originPoint){
-            
+
+
+        //console.log(originPoint);
+        //console.log(controls.getObject().position);
+        if (controls.getObject().position == originPoint) {
+
             // This means we stopped moving. So:
             pauseMusic();
+        } else {
+            //console.log("Moving");
+            //playMusic();
         }
-        else{
-            console.log("Moving");
-            playMusic();
-        }
-        
+
 
         var testCollisionResults = rayRAY.intersectObjects(collidableMeshList);
         // For all collisions
@@ -464,12 +477,12 @@ function animate() {
                         interactable = false;
                     }
                     // Check whether it's locked (might not be a door)
-                    if (testCollisionResults[i].object.name == "locked"){
+                    if (testCollisionResults[i].object.name == "locked") {
                         itsLocked();
                     }
                 }
 
-               
+
 
             }
 
