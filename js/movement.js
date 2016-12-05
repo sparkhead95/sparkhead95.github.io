@@ -204,9 +204,8 @@ function openDoor(door) {
     door.add(doorMove);
     doorMove.play();
     var i = 0;
-    //console.log(oppositeDoorIDs);
+    var intervalNo = 40;
     var animateDoor = setInterval(function () {
-
         if (i < 100) {
             if (oppositeDoorIDs.includes(door.id)) {
                 if (door.name == "closed") {
@@ -236,7 +235,7 @@ function openDoor(door) {
                 door.name = "closed";
             }
         }
-    }, 40)
+    }, intervalNo);
 }
 
 function itsLocked() {

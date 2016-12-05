@@ -308,7 +308,7 @@ var oppositeDoorIDs = [];
 
 // Final door
 cube = new THREE.BoxGeometry(50, 100, 5, 8);
-cube.translate(25,0,0);
+cube.translate(25, 0, 0);
 cubeMat = new THREE.MeshPhongMaterial({
     color: 0x7A5230,
     side: THREE.DoubleSide
@@ -322,7 +322,7 @@ leftDoor.name = "locked";
 scene.add(leftDoor);
 
 cubeFinal = new THREE.BoxGeometry(50, 100, 5, 8);
-cubeFinal.translate(-25,0,0);
+cubeFinal.translate(-25, 0, 0);
 var rightDoor = new THREE.Mesh(cubeFinal, cubeMat);
 rightDoor.position.set(50, 0, -375); //Z should be -345
 rightDoor.rotation.y = Math.PI * 15 / 360;
@@ -352,14 +352,14 @@ for (i = 0; i < doorsArray.length; i++) {
             minX = 100;
             minZ = 225;
             resetAxis = true;
-            
+
         }
     }
 
     doorsArray[i] = new THREE.Mesh(cube, cubeMat);
     doorsArray[i].position.set(minX, 0, minZ);
     doorsArray[i].rotation.y = Math.PI * 90 / 180;
-    if (!resetAxis){
+    if (!resetAxis) {
         oppositeDoorIDs.push(doorsArray[i].id);
     }
     doorsArray[i].name = "closed";
@@ -412,7 +412,7 @@ for (i = 0; i < lightsArray.length; i++) {
     min = min - 230;
     lightsArray[i].penumbra = 1;
     if (expandLightRadius) {
-        lightsArray[i].angle = 1;
+        lightsArray[i].angle = 1.2;
     } else {
         lightsArray[i].angle = 0.8;
     }
@@ -472,7 +472,7 @@ scene.add(fallenBulb);
 var camera = new THREE.PerspectiveCamera(90, width / height, 0.1, 1000);
 camera.rotation.x = Math.PI * 90 / 180;
 
-camera.add( listener );
+camera.add(listener);
 
 var ambientLight = new THREE.AmbientLight(0xffffff, 0.02);
 scene.add(ambientLight);
@@ -549,7 +549,7 @@ mtlLoader.load('Bed.mtl', function (materials) {
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('Bed.obj', function (object) {
-        object.position.set(-450, -50, 230);
+        object.position.set(-460, -50, 230);
         object.rotation.y = Math.PI * 90 / 180;
         object.scale.set(1.5, 1.5, 1.5);
         object.traverse(function (child) {
@@ -564,8 +564,80 @@ mtlLoader.load('Bed.mtl', function (materials) {
     }, onProgress, onError);
 });
 
+// Load the bedside tables
+mtlLoader.load('bedSideTable.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('bedSideTable.obj', function (object) {
+        object.position.set(-475, -50, 175);
+        object.rotation.y = Math.PI * 90 / 180;
+        object.scale.set(1.5, 1.5, 1.5);
+        object.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                child.geometry.computeVertexNormals();
+                collidableMeshList.push(child);
+            }
+        })
+        scene.add(object);
+    }, onProgress, onError);
+});
+
+// Load the bedside tables
+mtlLoader.load('bedSideTable.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('bedSideTable.obj', function (object) {
+        object.position.set(-475, -50, 280);
+        object.rotation.y = Math.PI * 90 / 180;
+        object.scale.set(1.5, 1.5, 1.5);
+        object.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                child.geometry.computeVertexNormals();
+                collidableMeshList.push(child);
+            }
+        })
+        scene.add(object);
+    }, onProgress, onError);
+});
+
+
+// Load closed wardrobe
+mtlLoader.load('closedWardrobe.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('closedWardrobe.obj', function (object) {
+        object.position.set(-300, -45, 340);
+        object.rotation.y = Math.PI;
+        object.scale.set(1.5, 1.5, 1.5);
+        object.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                child.geometry.computeVertexNormals();
+                collidableMeshList.push(child);
+            }
+        })
+        scene.add(object);
+    }, onProgress, onError);
+});
+
+
+
+
 var testObject;
 min = 170;
+minX = 0;
+var innerCounter = 0;
 
 for (i = 0; i < 9; i++) {
     //Load the ceiling lights
@@ -575,7 +647,23 @@ for (i = 0; i < 9; i++) {
         objLoader.setMaterials(materials);
         objLoader.setPath('obj/');
         objLoader.load('ceilingLight.obj', function (object) {
-            object.position.set(0, 80, min);
+
+            if (min < -320) {
+                console.log("Reached the end");
+                if (innerCounter == 0) {
+                    console.log("Setting to left side");
+                    min = 220;
+                    minX = -350;
+                    innerCounter++;
+                } else if (innerCounter == 1) {
+                    console.log("Setting to right side");
+                    min = 220;
+                    minX = 350;
+                }
+            }
+
+            object.position.set(minX, 80, min);
+            console.log(object.position);
             min = min - 230;
             //object.rotation.y = Math.PI * 90/180;
             //object.scale.set(1.5,1.5,1.5);
@@ -592,13 +680,12 @@ for (i = 0; i < 9; i++) {
             //console.log(testObject.geometry);
         }, onProgress, onError);
     });
-
-
-
-
-
 }
 
+
+var pointLight1 = new THREE.PointLight(0xFFffff, 0.7, 100);
+pointLight1.position.set(-350, 60, 220);
+scene.add(pointLight1);
 
 //var testObject2 = testObject.clone();
 //testObject2.position.set(0,80,0);
