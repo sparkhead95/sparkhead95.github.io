@@ -310,7 +310,6 @@ scene.add(fLSep);
 var cube = new THREE.BoxGeometry(150, 200, 5, 8);
 var tCube = new THREE.BoxGeometry(200, 50, 5, 8);
 
-
 var doorFrame1, doorFrame2, doorFrame3, doorFrame4, doorFrame5, doorFrame6, doorFrame7;
 var doorFrameArray = [doorFrame1, doorFrame2, doorFrame3, doorFrame4];
 var lFrame1, lFrame2, lFrame3, lFrame4, lFrame5, lFrame6, lFrame7;
@@ -420,13 +419,20 @@ scene.add(rightDoor);
 
 
 
+var doorMat = new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
+});
+
+var doorMatFlipped = new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
+});
 
 
 // Let's make all of the doors
 var Door1, Door2, Door3, Door4, Door5, Door6; // 1 to 3 is left side, 4 to 6 is right
 var doorsArray = [Door1, Door2, Door3, Door4, Door5, Door6];
 doors = new THREE.Object3D();
-var minZ = 225; //Where the left door array starts for left side corridor. Further down the corridor means a lower number than this.
+var minZ = 225; //Where the door array starts for left side corridor. Further down the corridor means a lower number than this.
 var minX = -100; // Same as above but for X axis.
 var resetAxis = false;
 
@@ -440,11 +446,11 @@ for (i = 0; i < doorsArray.length; i++) {
             minX = 100;
             minZ = 225;
             resetAxis = true;
-
+            doorMat = doorMatFlipped;
         }
     }
 
-    doorsArray[i] = new THREE.Mesh(cube, cubeMat);
+    doorsArray[i] = new THREE.Mesh(cube, doorMat);
     doorsArray[i].position.set(minX, 0, minZ);
     doorsArray[i].rotation.y = Math.PI * 90 / 180;
     if (!resetAxis) {
