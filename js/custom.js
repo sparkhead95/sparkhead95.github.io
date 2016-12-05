@@ -177,9 +177,9 @@ scene.add(liftRoof);
 
 
 // Lift roof cover
-cube = new THREE.BoxGeometry(100, 100, 5, 8);
+cube = new THREE.BoxGeometry(100, 100, 10, 8);
 var liftRoofCover = new THREE.Mesh(cube, cubeMat);
-liftRoofCover.position.set(0, 100, 350);
+liftRoofCover.position.set(0, 90, 353);
 liftRoofCover.receiveShadow = true;
 liftRoofCover.castShadow = true;
 collidableMeshList.push(liftRoofCover);
@@ -198,11 +198,10 @@ scene.add(fRWall);
 
 // Define lift Doors
 cube = new THREE.BoxGeometry(50, 100, 5, 8);
-cubeMat = new THREE.MeshPhongMaterial({
-    color: 0x848484,
-    side: THREE.DoubleSide
+var LiftDoorMaterial = new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('img/leftDoor.jpg')
 });
-var liftLeftDoor = new THREE.Mesh(cube, cubeMat);
+var liftLeftDoor = new THREE.Mesh(cube, LiftDoorMaterial);
 liftLeftDoor.position.set(-25, 0, 355);
 collidableMeshList.push(liftLeftDoor);
 liftLeftDoor.castShadow = true;
@@ -210,7 +209,7 @@ liftLeftDoor.receiveShadow = true;
 liftLeftDoor.name = "liftL";
 scene.add(liftLeftDoor);
 
-var liftRightDoor = new THREE.Mesh(cube, cubeMat);
+var liftRightDoor = new THREE.Mesh(cube, LiftDoorMaterial);
 liftRightDoor.position.set(25, 0, 355); //Z should be -345
 collidableMeshList.push(liftRightDoor);
 liftRightDoor.castShadow = true;
@@ -419,6 +418,10 @@ oppositeDoorIDs.push(rightDoor.id);
 scene.add(rightDoor);
 
 
+
+
+
+
 // Let's make all of the doors
 var Door1, Door2, Door3, Door4, Door5, Door6; // 1 to 3 is left side, 4 to 6 is right
 var doorsArray = [Door1, Door2, Door3, Door4, Door5, Door6];
@@ -564,7 +567,7 @@ camera.rotation.x = Math.PI * 90 / 180;
 
 camera.add(listener);
 
-var ambientLight = new THREE.AmbientLight(0xffffff, 0.02);
+var ambientLight = new THREE.AmbientLight(0xffffff, 0.05);
 scene.add(ambientLight);
 
 
@@ -699,6 +702,10 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
 });
 
 
+var wardrobe = new THREE.Object3D;
+minZ = 340;
+var myObjects;
+
 // Load closed wardrobe
 mtlLoader.load('closedWardrobe.mtl', function (materials) {
     materials.preload();
@@ -706,7 +713,7 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('closedWardrobe.obj', function (object) {
-        object.position.set(-300, -45, 340);
+        object.position.set(-300, -45, minZ);
         object.rotation.y = Math.PI;
         object.scale.set(1.5, 1.5, 1.5);
         object.traverse(function (child) {
@@ -721,13 +728,26 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
     }, onProgress, onError);
 });
 
+/*
+for (i = 0; i < myObjects.length; i++) {
+    console.log()
+}
+*/
 
+
+/*
+var newWardrobe = wardrobe.clone();
+newWardrobe.position.set(0, 0, 0);
+scene.add(newWardrobe);
+*/
 
 
 var testObject;
 min = 170;
 minX = 0;
 var innerCounter = 0;
+
+
 
 for (i = 0; i < 9; i++) {
     //Load the ceiling lights
