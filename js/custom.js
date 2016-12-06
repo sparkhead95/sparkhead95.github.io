@@ -417,6 +417,21 @@ oppositeDoorIDs.push(rightDoor.id);
 scene.add(rightDoor);
 
 
+// Dynamic left wall final room
+cubeMat = new THREE.MeshPhongMaterial({
+    color: 0x88898,
+    side: THREE.DoubleSide
+});
+var dLCube = new THREE.BoxGeometry(500, 200, 5, 8);
+var dLWall = new THREE.Mesh(dLCube, cubeMat);
+dLWall.position.set(-100, 0, -600);
+dLWall.receiveShadow = true;
+dLWall.castShadow = true;
+dLWall.rotation.y = Math.PI * 90 / 180;
+collidableMeshList.push(dLWall);
+scene.add(dLWall);
+
+
 
 
 var doorMat = new THREE.MeshPhongMaterial({
@@ -561,11 +576,61 @@ fallenLamp.intensity = 3;
 fallenLamp.distance = 700;
 fallenLamp.target.updateMatrixWorld();
 scene.add(fallenLamp);
-var fallenBulb = new THREE.PointLight(0xFFffff, 2, 100);
-fallenBulb.position.set(400, -40, -620);
+var fallenBulb = new THREE.SpotLight(0xFFffff, 1);
+fallenBulb.position.set(440, -30, -650);
+fallenBulb.target.position.set(500, 0, -700);
+fallenBulb.penumbra = 1;
+fallenBulb.shadowMapHeight = 2048;
+fallenBulb.shadowMapWidth = 2048;
+fallenBulb.shadowDarkness = 0.2;
+fallenBulb.angle = 0.25;
+fallenBulb.castShadow = true;
+fallenBulb.intensity = 3;
+fallenBulb.distance = 700;
+fallenBulb.target.updateMatrixWorld();
 scene.add(fallenBulb);
-//spotLightHelper = new THREE.SpotLightHelper(fallenLamp);
+//spotLightHelper = new THREE.SpotLightHelper(fallenBulb);
 //scene.add(spotLightHelper);
+
+// Wardrobe light
+var wardrobeLight = new THREE.SpotLight(0xFFffff, 10);
+wardrobeLight.position.set(-70, 40, -605);
+wardrobeLight.target.position.set(-50, 0, -605);
+wardrobeLight.penumbra = 1;
+wardrobeLight.angle = 0.7;
+wardrobeLight.castShadow = true;
+wardrobeLight.intensity = 2;
+wardrobeLight.target.updateMatrixWorld();
+scene.add(wardrobeLight);
+//spotLightHelper = new THREE.SpotLightHelper(wardrobeLight);
+//scene.add(spotLightHelper);
+
+// Wardrobe Doors
+var rCube = new THREE.BoxGeometry(45, 78, 5, 8);
+rCube.translate(22.5, 0, 0);
+var lCube = new THREE.BoxGeometry(45, 78, 5, 8);
+lCube.translate(-22.5, 0, 0);
+cubeMat = new THREE.MeshPhongMaterial({
+    color: 0x7A5230,
+    side: THREE.DoubleSide
+});
+var lWardrobeDoor = new THREE.Mesh(rCube, cubeMat);
+lWardrobeDoor.position.set(-43, 2, -558);
+lWardrobeDoor.receiveShadow = true;
+lWardrobeDoor.castShadow = true;
+lWardrobeDoor.rotation.y = Math.PI * 90 / 180;
+collidableMeshList.push(lWardrobeDoor);
+scene.add(lWardrobeDoor);
+
+var rWardrobeDoor = new THREE.Mesh(lCube, cubeMat);
+rWardrobeDoor.position.set(-43, 2, -643);
+rWardrobeDoor.receiveShadow = true;
+rWardrobeDoor.castShadow = true;
+rWardrobeDoor.rotation.y = Math.PI * 90 / 180;
+collidableMeshList.push(rWardrobeDoor);
+scene.add(rWardrobeDoor);
+
+
 
 
 var camera = new THREE.PerspectiveCamera(90, width / height, 0.1, 1000);
@@ -614,20 +679,20 @@ manager.onProgress = function (item, loaded, total) {
     console.log(item, loaded, total);
 };
 
+//(395, -40, -610);
+
 // Load the fallen lamp
 var mtlLoader = new THREE.MTLLoader();
 mtlLoader.setPath('obj/');
-mtlLoader.load('Lamp.mtl', function (materials) {
+mtlLoader.load('fallenlamp.mtl', function (materials) {
     materials.preload();
     var objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
-    objLoader.load('Lamp.obj', function (object) {
+    objLoader.load('fallenlamp.obj', function (object) {
 
-        object.position.set(450, -40, -650);
-        object.rotation.x = Math.PI * 73 / 180;
-        //object.rotation.y = Math.PI * 90/180;
-        object.rotation.z = Math.PI * 55 / 180;
+        object.position.set(415, 0, -630);
+        object.rotation.y = Math.PI * 130 / 180;
         object.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
                     child.castShadow = true;
@@ -642,24 +707,33 @@ mtlLoader.load('Lamp.mtl', function (materials) {
 });
 
 // Load the beds
+var beds = [];
+
+
 mtlLoader.load('Bed.mtl', function (materials) {
     materials.preload();
     var objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('Bed.obj', function (object) {
-        object.position.set(-460, -50, 230);
-        object.rotation.y = Math.PI * 90 / 180;
-        object.scale.set(1.5, 1.5, 1.5);
-        object.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-                child.geometry.computeVertexNormals();
-                collidableMeshList.push(child);
-            }
-        })
-        scene.add(object);
+        beds = [object.clone(), object.clone()];
+        for (i = 0; i < beds.length; i++) {
+            beds[i].position.set(-460, -50, 230);
+            beds[i].rotation.y = Math.PI * 90 / 180;
+            beds[i].scale.set(1.5, 1.5, 1.5);
+            beds[i].traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.geometry.computeVertexNormals();
+                    collidableMeshList.push(child);
+                }
+            })
+            scene.add(beds[i]);
+        }
+        beds[1].position.set(50, -50, -700);
+        beds[1].rotation.y = Math.PI * 0 / 180;
+        console.log(beds[1]);
     }, onProgress, onError);
 });
 
@@ -709,7 +783,7 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
 
 
 minZ = 340;
-var wardrobes;
+var wardrobes = [];
 
 // Load closed wardrobe
 mtlLoader.load('closedWardrobe.mtl', function (materials) {
@@ -733,13 +807,63 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
             })
             scene.add(wardrobes[i]);
             minZ = minZ - 250;
-        }
 
+        }
+        wardrobes[2].position.z += 45;
     }, onProgress, onError);
 });
 
-console.log(wardrobes[2].position);
-//wardrobes[2].position.z -= 50;
+// Load open wardrobe
+// Load closed wardrobe
+mtlLoader.load('openWardrobe.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('openWardrobe.obj', function (object) {
+        object.position.set(-80, -45, -600);
+        object.rotation.y = Math.PI * 90 / 180;
+        object.scale.set(1.5, 1.5, 1.5);
+        object.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                child.geometry.computeVertexNormals();
+                collidableMeshList.push(child);
+            }
+        })
+        scene.add(object);
+    }, onProgress, onError);
+});
+
+
+// Load the ghost
+// Load the fallen lamp
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath('obj/');
+mtlLoader.load('ghost.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('ghost.obj', function (object) {
+        object.position.set(-100, 0, -620);
+        object.rotation.y = Math.PI * 90 / 180;
+        object.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.geometry.computeVertexNormals();
+                    collidableMeshList.push(child);
+                }
+            })
+            //object.scale.set(0.05,0.05,0.05);
+        scene.add(object);
+    }, onProgress, onError);
+});
+
+
+
 
 /*
 for (i = 0; i < myObjects.length; i++) {

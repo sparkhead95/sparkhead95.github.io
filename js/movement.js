@@ -327,6 +327,28 @@ function playMusic() {
     }
 }
 
+var wardrobeDoorsOpened = false;
+
+function OpenWardrobeDoors() {
+    lWardrobeDoor.add(doorMove);
+    doorMove.play();
+    var i = 0;
+
+    var animateDoor = setInterval(function () {
+        if (i < 100) {
+            lWardrobeDoor.rotation.y -= Math.PI * 1 / 180;
+            rWardrobeDoor.rotation.y += Math.PI * 1 / 180;
+            i++;
+        } else {
+            clearInterval(animateDoor);
+        }
+
+    }, 40)
+}
+
+
+
+
 
 function animate() {
     stats.begin();
@@ -497,13 +519,20 @@ function animate() {
 
 
         if (freshStart) {
-            console.log("Moving char");
+            //console.log("Moving char");
             controls.getObject().position.set(0, 0, 400);
             OpenLiftDoors();
             freshStart = false;
         }
 
 
+        if (controls.getObject().position.z < -380) {
+            if (!wardrobeDoorsOpened) {
+                //console.log("Opening doors");
+                wardrobeDoorsOpened = true;
+                OpenWardrobeDoors();
+            }
+        }
 
 
 
