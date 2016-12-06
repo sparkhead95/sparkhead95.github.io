@@ -92,25 +92,33 @@ scene.add(roof);
 // Define the lift
 
 // Left wall
-cube = new THREE.BoxGeometry(200, 200, 5, 8);
+cube = new THREE.BoxGeometry(150, 200, 5, 8);
 var cubeMat = new THREE.MeshPhongMaterial({
-    map: THREE.ImageUtils.loadTexture('img/wall.jpg'),
+    map: THREE.ImageUtils.loadTexture('img/liftwall.jpg'),
     side: THREE.DoubleSide
 });
 
 
 
 var lWall = new THREE.Mesh(cube, cubeMat);
-lWall.position.set(-50, 0, 450);
+lWall.position.set(-50, 0, 425);
 lWall.receiveShadow = true;
 lWall.castShadow = true;
 lWall.rotation.y = Math.PI * 90 / 180;
 collidableMeshList.push(lWall);
 scene.add(lWall);
 
+
+// Left wall
+cube = new THREE.BoxGeometry(150, 200, 5, 8);
+var cubeMat = new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('img/rightwall.jpg'),
+    side: THREE.DoubleSide
+});
+
 // Right wall
 var rWall = new THREE.Mesh(cube, cubeMat);
-rWall.position.set(50, 0, 450);
+rWall.position.set(50, 0, 425);
 rWall.receiveShadow = true;
 rWall.castShadow = true;
 rWall.rotation.y = Math.PI * 90 / 180;
@@ -119,13 +127,18 @@ scene.add(rWall);
 
 
 // Back wall
-cube = new THREE.BoxGeometry(1000, 200, 5, 8);
+cube = new THREE.BoxGeometry(100, 200, 5, 8);
 var fWall = new THREE.Mesh(cube, cubeMat);
 fWall.position.set(0, 0, 500);
 fWall.receiveShadow = true;
 fWall.castShadow = true;
 collidableMeshList.push(fWall);
 scene.add(fWall);
+
+cubeMat = new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('img/wall.jpg'),
+    side: THREE.DoubleSide
+});
 
 // front left wall
 cube = new THREE.BoxGeometry(55, 200, 5, 8);
@@ -148,7 +161,7 @@ scene.add(fRWall);
 // Lift threshold
 liftThreshCube = new THREE.BoxGeometry(100, 5, 5, 8);
 var cubeMat = new THREE.MeshPhongMaterial({
-    color: 0x88898,
+    map: THREE.ImageUtils.loadTexture('img/leftDoor.jpg'),
     side: THREE.DoubleSide
 });
 var liftThreshold = new THREE.Mesh(liftThreshCube, cubeMat);
@@ -164,25 +177,48 @@ var cubeMat = new THREE.MeshPhongMaterial({
     color: 0x88898,
     side: THREE.DoubleSide
 });
-var liftFloor = new THREE.Mesh(liftFloorCube, cubeMat);
-liftFloor.position.set(0, -50, 455);
+
+var liftFloorTx = THREE.ImageUtils.loadTexture('img/liftfloor.jpg');
+liftFloorTx.wrapS = liftFloorTx.wrapT = THREE.RepeatWrapping;
+liftFloorTx.repeat.set(1, 1);
+var liftFloorMat = new THREE.MeshPhongMaterial({
+    map: liftFloorTx
+});
+
+var liftFloor = new THREE.Mesh(liftFloorCube, liftFloorMat);
+liftFloor.position.set(0, -50, 457.5);
 liftFloor.rotation.x = Math.PI * 90 / 180;
 liftFloor.receiveShadow = true;
 liftFloor.castShadow = true;
 scene.add(liftFloor);
 
+
+
+var cubeMat = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    side: THREE.DoubleSide
+});
+
+
 var liftRoof = new THREE.Mesh(liftFloorCube, cubeMat);
-liftRoof.position.set(0, 50, 455);
+liftRoof.position.set(0, 45, 455);
 liftRoof.rotation.x = Math.PI * 90 / 180;
 liftRoof.receiveShadow = true;
 liftRoof.castShadow = true;
 scene.add(liftRoof);
 
 
+cubeMat = new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('img/wall.jpg'),
+    side: THREE.DoubleSide
+});
+
+
 // Lift roof cover
 cube = new THREE.BoxGeometry(100, 100, 10, 8);
 var liftRoofCover = new THREE.Mesh(cube, cubeMat);
 liftRoofCover.position.set(0, 90, 353);
+liftRoofCover.rotation.x = Math.PI * 180 / 180;
 liftRoofCover.receiveShadow = true;
 liftRoofCover.castShadow = true;
 collidableMeshList.push(liftRoofCover);
@@ -298,8 +334,7 @@ for (i = 0; i < rightSeparators.length; i++) {
 
 // Make 7 door frames
 // Define the cube 
-var cube = new THREE.BoxGeometry(150, 200, 5, 8);
-var tCube = new THREE.BoxGeometry(200, 50, 5, 8);
+var cube = new THREE.BoxGeometry(150, 100, 5, 8);
 
 var doorFrame1, doorFrame2, doorFrame3, doorFrame4, doorFrame5, doorFrame6, doorFrame7;
 var doorFrameArray = [doorFrame1, doorFrame2, doorFrame3, doorFrame4];
@@ -340,10 +375,11 @@ for (i = 0; i < doorFrameArray.length; i++) {
 }
 
 
-var tCube = new THREE.BoxGeometry(500, 50, 5, 8);
+var tCube = new THREE.BoxGeometry(750, 50, 5, 8);
 var leftTFrame = new THREE.Mesh(tCube, cubeMat);
 leftTFrame.position.set(-100, 75, 0);
 leftTFrame.rotation.y = Math.PI * 90 / 180;
+leftTFrame.rotation.x = Math.PI * 180 / 180;
 collidableMeshList.push(leftTFrame);
 leftTFrame.castShadow = true;
 leftTFrame.receiveShadow = true;
