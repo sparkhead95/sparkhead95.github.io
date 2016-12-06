@@ -198,6 +198,14 @@ audioLoader.load('sounds/door.ogg', function (buffer) {
 
 });
 
+var ghostScream = new THREE.PositionalAudio(listener);
+//console.log("Playing..");
+audioLoader.load('sounds/scream.ogg', function (buffer) {
+    ghostScream.setBuffer(buffer);
+    ghostScream.setRefDistance(20);
+
+});
+
 
 
 function openDoor(door) {
@@ -569,8 +577,10 @@ function animate() {
         }
 
         // After reaching another Z axis, ghost flies at you
-        if (controls.getObject().position.z < -450) {
+        if (controls.getObject().position.z < -600) {
             ghostAttacking = true;
+            ghostOBJ.add(ghostScream);
+            ghostScream.play();
         }
         if (wardrobeDoorsOpened) {
             if (ghostAttacking) {
@@ -590,6 +600,10 @@ function animate() {
 
                     diffX = ghostOBJ.position.x - controls.getObject().position.x;
                     //console.log("Diff x = " + diffX);
+
+                    ghostOBJ.lookAt(character);
+
+
                 } else {
                     ghostAttacking = false;
                 }
@@ -599,8 +613,6 @@ function animate() {
 
 
         prevTime = time;
-        //console.log(ghostOBJ);
-        //var matrix = new THREE.Matrix4();
 
     }
     stats.end();

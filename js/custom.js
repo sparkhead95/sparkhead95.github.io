@@ -856,7 +856,7 @@ function loadGhost() {
         objLoader.setMaterials(materials);
         objLoader.setPath('obj/');
         objLoader.load('ghost.obj', function (object) {
-            object.position.set(-100, -40, -620);
+            object.position.set(-100, -25, -620);
             object.rotation.y = Math.PI * 90 / 180;
             object.traverse(function (child) {
                     if (child instanceof THREE.Mesh) {
