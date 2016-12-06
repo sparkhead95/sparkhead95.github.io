@@ -92,16 +92,13 @@ scene.add(roof);
 // Define the lift
 
 // Left wall
-cube = new THREE.BoxGeometry(150, 200, 5, 8);
+cube = new THREE.BoxGeometry(150, 100, 5, 8);
 var cubeMat = new THREE.MeshPhongMaterial({
     map: THREE.ImageUtils.loadTexture('img/liftwall.jpg'),
     side: THREE.DoubleSide
 });
-
-
-
 var lWall = new THREE.Mesh(cube, cubeMat);
-lWall.position.set(-50, 0, 425);
+lWall.position.set(-50, 0, 426);
 lWall.receiveShadow = true;
 lWall.castShadow = true;
 lWall.rotation.y = Math.PI * 90 / 180;
@@ -109,8 +106,17 @@ collidableMeshList.push(lWall);
 scene.add(lWall);
 
 
+// Back wall
+cube = new THREE.BoxGeometry(100, 100, 5, 8);
+var fWall = new THREE.Mesh(cube, cubeMat);
+fWall.position.set(0, 0, 500);
+fWall.receiveShadow = true;
+fWall.castShadow = true;
+collidableMeshList.push(fWall);
+scene.add(fWall);
+
 // Left wall
-cube = new THREE.BoxGeometry(150, 200, 5, 8);
+cube = new THREE.BoxGeometry(150, 100, 5, 8);
 var cubeMat = new THREE.MeshPhongMaterial({
     map: THREE.ImageUtils.loadTexture('img/rightwall.jpg'),
     side: THREE.DoubleSide
@@ -118,22 +124,13 @@ var cubeMat = new THREE.MeshPhongMaterial({
 
 // Right wall
 var rWall = new THREE.Mesh(cube, cubeMat);
-rWall.position.set(50, 0, 425);
+rWall.position.set(50, 0, 426);
 rWall.receiveShadow = true;
 rWall.castShadow = true;
 rWall.rotation.y = Math.PI * 90 / 180;
 collidableMeshList.push(rWall);
 scene.add(rWall);
 
-
-// Back wall
-cube = new THREE.BoxGeometry(100, 200, 5, 8);
-var fWall = new THREE.Mesh(cube, cubeMat);
-fWall.position.set(0, 0, 500);
-fWall.receiveShadow = true;
-fWall.castShadow = true;
-collidableMeshList.push(fWall);
-scene.add(fWall);
 
 cubeMat = new THREE.MeshPhongMaterial({
     map: THREE.ImageUtils.loadTexture('img/wall.jpg'),
@@ -258,7 +255,7 @@ scene.add(liftRightDoor);
 
 
 cubeMat = new THREE.MeshPhongMaterial({
-    map: THREE.ImageUtils.loadTexture('img/wall.jpg'),
+    map: THREE.ImageUtils.loadTexture('img/uwall.jpg'),
     side: THREE.DoubleSide
 });
 
@@ -374,7 +371,6 @@ for (i = 0; i < doorFrameArray.length; i++) {
     min = min - 200;
 }
 
-
 var tCube = new THREE.BoxGeometry(750, 50, 5, 8);
 var leftTFrame = new THREE.Mesh(tCube, cubeMat);
 leftTFrame.position.set(-100, 75, 0);
@@ -388,20 +384,24 @@ scene.add(leftTFrame);
 var rightTFrame = new THREE.Mesh(tCube, cubeMat);
 rightTFrame.position.set(100, 75, 0);
 rightTFrame.rotation.y = Math.PI * 90 / 180;
+rightTFrame.rotation.x = Math.PI * 180 / 180;
 collidableMeshList.push(rightTFrame);
 rightTFrame.castShadow = true;
 rightTFrame.receiveShadow = true;
 scene.add(rightTFrame);
 
 
+
 // Final door Frame
 var cube = new THREE.BoxGeometry(500, 200, 5, 8);
+var tCube = new THREE.BoxGeometry(100, 100, 5, 8);
 finalLFrame = new THREE.Mesh(cube, cubeMat);
 finalRFrame = new THREE.Mesh(cube, cubeMat);
-finalTFrame = new THREE.Mesh(cube, cubeMat);
+finalTFrame = new THREE.Mesh(tCube, cubeMat);
 finalLFrame.position.set(300, 0, -375); // Define their position
 finalRFrame.position.set(-300, 0, -375);
-finalTFrame.position.set(0, 150, -375);
+finalTFrame.position.set(0, 100, -375);
+finalTFrame.rotation.x = Math.PI * 180 / 180;
 collidableMeshList.push(finalLFrame, finalRFrame, finalTFrame);
 finalRFrame.castShadow = true;
 finalRFrame.receiveShadow = true;
@@ -451,7 +451,7 @@ cubeMat = new THREE.MeshPhongMaterial({
 });
 var dLCube = new THREE.BoxGeometry(500, 200, 5, 8);
 var dLWall = new THREE.Mesh(dLCube, cubeMat);
-dLWall.position.set(-100, 0, -600);
+dLWall.position.set(-100, 0, -625);
 dLWall.receiveShadow = true;
 dLWall.castShadow = true;
 dLWall.rotation.y = Math.PI * 90 / 180;
@@ -574,7 +574,7 @@ for (i = 0; i < lightsArray.length; i++) {
     lightsArray[i] = new THREE.SpotLight(0xFFffff, 0.7); // Tell JS what the light is
     //pointLightsArray[i] = new THREE.PointLight( 0xFFffff, 2, 100 );
     if (i == 0) {
-        lightsArray[i].position.set(minX, 45, min);
+        lightsArray[i].position.set(minX, 35, min);
     } else {
         lightsArray[i].position.set(minX, 80, min);
     }
