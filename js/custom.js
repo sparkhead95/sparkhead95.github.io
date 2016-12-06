@@ -263,7 +263,7 @@ cubeMat = new THREE.MeshPhongMaterial({
 // Far left wall
 cube = new THREE.BoxGeometry(1500, 200, 5, 8);
 var farLWall = new THREE.Mesh(cube, cubeMat);
-farLWall.position.set(-500, 0, -250);
+farLWall.position.set(-500, 15, -250);
 farLWall.receiveShadow = true;
 farLWall.castShadow = true;
 farLWall.rotation.y = Math.PI * 90 / 180;
@@ -272,7 +272,7 @@ scene.add(farLWall);
 
 // Far right wall
 var farRWall = new THREE.Mesh(cube, cubeMat);
-farRWall.position.set(500, 0, -250);
+farRWall.position.set(500, 15, -250);
 farRWall.receiveShadow = true;
 farRWall.castShadow = true;
 farRWall.rotation.y = Math.PI * 90 / 180;
@@ -297,7 +297,16 @@ var rightSeparators = [fRSep, sRSep];
 // First left room secret separator
 cube = new THREE.BoxGeometry(400, 200, 5, 8);
 secretLSep = new THREE.Mesh(cube, cubeMat);
-secretLSep.position.set(-300, 0, 350);
+secretLSep.position.set(-300, 15, 350);
+secretLSep.receiveShadow = true;
+secretLSep.castShadow = true;
+collidableMeshList.push(secretLSep);
+scene.add(secretLSep);
+
+// First right room back wall
+cube = new THREE.BoxGeometry(400, 200, 5, 8);
+secretLSep = new THREE.Mesh(cube, cubeMat);
+secretLSep.position.set(300, 15, 350);
 secretLSep.receiveShadow = true;
 secretLSep.castShadow = true;
 collidableMeshList.push(secretLSep);
@@ -308,7 +317,7 @@ var startX = -300;
 
 for (i = 0; i < leftSeparators.length; i++) {
     leftSeparators[i] = new THREE.Mesh(cube, cubeMat);
-    leftSeparators[i].position.set(-300, 0, min);
+    leftSeparators[i].position.set(-300, 15, min);
     leftSeparators[i].receiveShadow = true;
     leftSeparators[i].castShadow = true;
     collidableMeshList.push(leftSeparators[i]);
@@ -320,7 +329,7 @@ min = 100;
 
 for (i = 0; i < rightSeparators.length; i++) {
     rightSeparators[i] = new THREE.Mesh(cube, cubeMat);
-    rightSeparators[i].position.set(300, 0, min);
+    rightSeparators[i].position.set(300, 15, min);
     rightSeparators[i].receiveShadow = true;
     rightSeparators[i].castShadow = true;
     collidableMeshList.push(rightSeparators[i]);
@@ -751,6 +760,7 @@ mtlLoader.load('fallenlamp.mtl', function (materials) {
 
         object.position.set(140, 0, -530);
         object.rotation.y = Math.PI * 140 / 180;
+        object.rotation.x = Math.PI * 5 / 180;
         object.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
                     child.castShadow = true;
@@ -796,16 +806,24 @@ mtlLoader.load('tippedSofa.mtl', function (materials) {
 // Load the beds
 var beds = [];
 
-
 mtlLoader.load('Bed.mtl', function (materials) {
     materials.preload();
     var objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('Bed.obj', function (object) {
-        beds = [object.clone(), object.clone()];
+        beds = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), , object.clone()];
         for (i = 0; i < beds.length; i++) {
-            beds[i].position.set(-460, -50, 230);
+            console.log(i);
+            console.log(min);
+            if (i == 0) {
+                min = -460;
+                minZ = 230;
+            } else if (i == 3) {
+                min = 460;
+                minZ = 230;
+            }
+            beds[i].position.set(min, -50, minZ);
             beds[i].rotation.y = Math.PI * 90 / 180;
             beds[i].scale.set(1.5, 1.5, 1.5);
             beds[i].traverse(function (child) {
@@ -816,11 +834,12 @@ mtlLoader.load('Bed.mtl', function (materials) {
                     collidableMeshList.push(child);
                 }
             })
+            console.log(beds[i]);
+            minZ -= 200;
             scene.add(beds[i]);
         }
         beds[1].position.set(50, -50, -700);
         beds[1].rotation.y = Math.PI * 0 / 180;
-        //console.log(beds[1]);
     }, onProgress, onError);
 });
 
