@@ -132,14 +132,14 @@ collidableMeshList.push(rWall);
 scene.add(rWall);
 
 
-cubeMat = new THREE.MeshPhongMaterial({
+wallMat = new THREE.MeshPhongMaterial({
     map: THREE.ImageUtils.loadTexture('img/wall.jpg'),
     side: THREE.DoubleSide
 });
 
 // front left wall
 cube = new THREE.BoxGeometry(55, 200, 5, 8);
-var fLWall = new THREE.Mesh(cube, cubeMat);
+var fLWall = new THREE.Mesh(cube, wallMat);
 fLWall.position.set(-75, 0, 350);
 fLWall.receiveShadow = true;
 fLWall.castShadow = true;
@@ -148,7 +148,7 @@ scene.add(fLWall);
 
 // front right wall
 cube = new THREE.BoxGeometry(55, 200, 5, 8);
-var fRWall = new THREE.Mesh(cube, cubeMat);
+var fRWall = new THREE.Mesh(cube, wallMat);
 fRWall.position.set(75, 0, 350);
 fRWall.receiveShadow = true;
 fRWall.castShadow = true;
@@ -205,15 +205,9 @@ liftRoof.castShadow = true;
 scene.add(liftRoof);
 
 
-cubeMat = new THREE.MeshPhongMaterial({
-    map: THREE.ImageUtils.loadTexture('img/wall.jpg'),
-    side: THREE.DoubleSide
-});
-
-
 // Lift roof cover
 cube = new THREE.BoxGeometry(100, 100, 10, 8);
-var liftRoofCover = new THREE.Mesh(cube, cubeMat);
+var liftRoofCover = new THREE.Mesh(cube, wallMat);
 liftRoofCover.position.set(0, 90, 353);
 liftRoofCover.rotation.x = Math.PI * 180 / 180;
 liftRoofCover.receiveShadow = true;
@@ -225,7 +219,7 @@ scene.add(liftRoofCover);
 
 // front right wall
 cube = new THREE.BoxGeometry(55, 200, 5, 8);
-var fRWall = new THREE.Mesh(cube, cubeMat);
+var fRWall = new THREE.Mesh(cube, wallMat);
 fRWall.position.set(75, 0, 350);
 fRWall.receiveShadow = true;
 fRWall.castShadow = true;
@@ -237,6 +231,7 @@ cube = new THREE.BoxGeometry(50, 100, 5, 8);
 var LiftDoorMaterial = new THREE.MeshPhongMaterial({
     map: THREE.ImageUtils.loadTexture('img/leftDoor.jpg')
 });
+
 var liftLeftDoor = new THREE.Mesh(cube, LiftDoorMaterial);
 liftLeftDoor.position.set(-25, 0, 355);
 collidableMeshList.push(liftLeftDoor);
@@ -254,7 +249,7 @@ liftRightDoor.name = "liftR";
 scene.add(liftRightDoor);
 
 
-cubeMat = new THREE.MeshPhongMaterial({
+uWallMat = new THREE.MeshPhongMaterial({
     map: THREE.ImageUtils.loadTexture('img/uwall.jpg'),
     side: THREE.DoubleSide
 });
@@ -262,7 +257,7 @@ cubeMat = new THREE.MeshPhongMaterial({
 
 // Far left wall
 cube = new THREE.BoxGeometry(1500, 200, 5, 8);
-var farLWall = new THREE.Mesh(cube, cubeMat);
+var farLWall = new THREE.Mesh(cube, wallMat);
 farLWall.position.set(-500, 15, -250);
 farLWall.receiveShadow = true;
 farLWall.castShadow = true;
@@ -271,7 +266,7 @@ collidableMeshList.push(farLWall);
 scene.add(farLWall);
 
 // Far right wall
-var farRWall = new THREE.Mesh(cube, cubeMat);
+var farRWall = new THREE.Mesh(cube, wallMat);
 farRWall.position.set(500, 15, -250);
 farRWall.receiveShadow = true;
 farRWall.castShadow = true;
@@ -281,7 +276,7 @@ scene.add(farRWall);
 
 // Far front wall
 cube = new THREE.BoxGeometry(1000, 200, 5, 8);
-var farFWall = new THREE.Mesh(cube, cubeMat);
+var farFWall = new THREE.Mesh(cube, wallMat);
 farFWall.position.set(0, 0, -750);
 farFWall.receiveShadow = true;
 farFWall.castShadow = true;
@@ -296,7 +291,7 @@ var rightSeparators = [fRSep, sRSep];
 
 // First left room secret separator
 cube = new THREE.BoxGeometry(400, 200, 5, 8);
-secretLSep = new THREE.Mesh(cube, cubeMat);
+secretLSep = new THREE.Mesh(cube, wallMat);
 secretLSep.position.set(-300, 15, 350);
 secretLSep.receiveShadow = true;
 secretLSep.castShadow = true;
@@ -305,7 +300,7 @@ scene.add(secretLSep);
 
 // First right room back wall
 cube = new THREE.BoxGeometry(400, 200, 5, 8);
-secretLSep = new THREE.Mesh(cube, cubeMat);
+secretLSep = new THREE.Mesh(cube, wallMat);
 secretLSep.position.set(300, 15, 350);
 secretLSep.receiveShadow = true;
 secretLSep.castShadow = true;
@@ -316,7 +311,7 @@ var min = 100; // Where the first separator is on the Z axis
 var startX = -300;
 
 for (i = 0; i < leftSeparators.length; i++) {
-    leftSeparators[i] = new THREE.Mesh(cube, cubeMat);
+    leftSeparators[i] = new THREE.Mesh(cube, wallMat);
     leftSeparators[i].position.set(-300, 15, min);
     leftSeparators[i].receiveShadow = true;
     leftSeparators[i].castShadow = true;
@@ -328,7 +323,7 @@ for (i = 0; i < leftSeparators.length; i++) {
 min = 100;
 
 for (i = 0; i < rightSeparators.length; i++) {
-    rightSeparators[i] = new THREE.Mesh(cube, cubeMat);
+    rightSeparators[i] = new THREE.Mesh(cube, wallMat);
     rightSeparators[i].position.set(300, 15, min);
     rightSeparators[i].receiveShadow = true;
     rightSeparators[i].castShadow = true;
@@ -358,8 +353,8 @@ for (i = 0; i < doorFrameArray.length; i++) {
 
     doorFrameArray[i] = new THREE.Object3D(); // Define each doorFrame in the array as an object	
 
-    lFrameArray[i] = new THREE.Mesh(cube, cubeMat); // Define the sides of the frame
-    rFrameArray[i] = new THREE.Mesh(cube, cubeMat); // Define the sides of the frame
+    lFrameArray[i] = new THREE.Mesh(cube, wallMat); // Define the sides of the frame
+    rFrameArray[i] = new THREE.Mesh(cube, wallMat); // Define the sides of the frame
 
     lFrameArray[i].position.set(100, 0, min); // Define their position
     rFrameArray[i].position.set(-100, 0, min);
@@ -381,7 +376,7 @@ for (i = 0; i < doorFrameArray.length; i++) {
 }
 
 var tCube = new THREE.BoxGeometry(750, 50, 5, 8);
-var leftTFrame = new THREE.Mesh(tCube, cubeMat);
+var leftTFrame = new THREE.Mesh(tCube, uWallMat);
 leftTFrame.position.set(-100, 75, 0);
 leftTFrame.rotation.y = Math.PI * 90 / 180;
 leftTFrame.rotation.x = Math.PI * 180 / 180;
@@ -390,7 +385,7 @@ leftTFrame.castShadow = true;
 leftTFrame.receiveShadow = true;
 scene.add(leftTFrame);
 
-var rightTFrame = new THREE.Mesh(tCube, cubeMat);
+var rightTFrame = new THREE.Mesh(tCube, uWallMat);
 rightTFrame.position.set(100, 75, 0);
 rightTFrame.rotation.y = Math.PI * 90 / 180;
 rightTFrame.rotation.x = Math.PI * 180 / 180;
@@ -404,11 +399,11 @@ scene.add(rightTFrame);
 // Final door Frame
 var cube = new THREE.BoxGeometry(500, 200, 5, 8);
 var tCube = new THREE.BoxGeometry(100, 100, 5, 8);
-finalLFrame = new THREE.Mesh(cube, cubeMat);
-finalRFrame = new THREE.Mesh(cube, cubeMat);
-finalTFrame = new THREE.Mesh(tCube, cubeMat);
-finalLFrame.position.set(300, 0, -375); // Define their position
-finalRFrame.position.set(-300, 0, -375);
+finalLFrame = new THREE.Mesh(cube, wallMat);
+finalRFrame = new THREE.Mesh(cube, wallMat);
+finalTFrame = new THREE.Mesh(tCube, uWallMat);
+finalLFrame.position.set(300, 15, -375); // Define their position
+finalRFrame.position.set(-300, 15, -375);
 finalTFrame.position.set(0, 100, -375);
 finalTFrame.rotation.x = Math.PI * 180 / 180;
 collidableMeshList.push(finalLFrame, finalRFrame, finalTFrame);
@@ -423,6 +418,14 @@ scene.add(finalTFrame);
 scene.add(finalRFrame);
 var oppositeDoorIDs = [];
 
+var doorMat = new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
+});
+
+var doorMatFlipped = new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
+});
+
 
 // Final door
 cube = new THREE.BoxGeometry(50, 100, 5, 8);
@@ -432,7 +435,7 @@ cubeMat = new THREE.MeshPhongMaterial({
     side: THREE.DoubleSide
 });
 
-var leftDoor = new THREE.Mesh(cube, cubeMat);
+var leftDoor = new THREE.Mesh(cube, doorMat);
 leftDoor.position.set(-50, 0, -375);
 collidableMeshList.push(leftDoor);
 leftDoor.castShadow = true;
@@ -442,7 +445,8 @@ scene.add(leftDoor);
 
 cubeFinal = new THREE.BoxGeometry(50, 100, 5, 8);
 cubeFinal.translate(-25, 0, 0);
-var rightDoor = new THREE.Mesh(cubeFinal, cubeMat);
+
+var rightDoor = new THREE.Mesh(cubeFinal, doorMatFlipped);
 rightDoor.position.set(50, 0, -375); //Z should be -345
 rightDoor.rotation.y = Math.PI * 15 / 360;
 collidableMeshList.push(rightDoor);
@@ -452,25 +456,44 @@ rightDoor.name = "closed";
 oppositeDoorIDs.push(rightDoor.id);
 scene.add(rightDoor);
 
+// En-suite door
+var ensuiteDoor = new THREE.Mesh(cube, doorMat);
+ensuiteDoor.position.set(170, 0, -377);
+ensuiteDoor.rotation.y = Math.PI * 90 / 180;
+collidableMeshList.push(ensuiteDoor);
+ensuiteDoor.castShadow = true;
+ensuiteDoor.receiveShadow = true;
+ensuiteDoor.name = "locked";
+scene.add(ensuiteDoor);
+
+// en-suite door cover
+var esCoverCube = new THREE.BoxGeometry(65, 100, 5, 8);
+var esCover = new THREE.Mesh(esCoverCube, uWallMat);
+esCover.position.set(170, 100, -405);
+esCover.receiveShadow = true;
+esCover.castShadow = true;
+esCover.rotation.x = Math.PI * 180 / 180;
+esCover.rotation.y = Math.PI * 90 / 180;
+collidableMeshList.push(esCover);
+scene.add(esCover);
 
 // Dynamic left wall final room
-cubeMat = new THREE.MeshPhongMaterial({
-    color: 0x88898,
-    side: THREE.DoubleSide
-});
+
 var dLCube = new THREE.BoxGeometry(500, 200, 5, 8);
-var dLWall = new THREE.Mesh(dLCube, cubeMat);
-dLWall.position.set(-100, 0, -625);
+var dLWall = new THREE.Mesh(dLCube, wallMat);
+dLWall.position.set(-100, 15, -625);
 dLWall.receiveShadow = true;
 dLWall.castShadow = true;
 dLWall.rotation.y = Math.PI * 90 / 180;
 collidableMeshList.push(dLWall);
 scene.add(dLWall);
 
+
+
 // Dynamic right wall final room
 var dRCube = new THREE.BoxGeometry(400, 200, 5, 8);
-var dRWall = new THREE.Mesh(dRCube, cubeMat);
-dRWall.position.set(170, 0, -625);
+var dRWall = new THREE.Mesh(dRCube, wallMat);
+dRWall.position.set(170, 15, -627);
 dRWall.receiveShadow = true;
 dRWall.castShadow = true;
 dRWall.rotation.y = Math.PI * 90 / 180;
@@ -478,36 +501,28 @@ collidableMeshList.push(dRWall);
 scene.add(dRWall);
 
 
+
+
 // En-suite left wall
 var ensuiteCube = new THREE.BoxGeometry(100, 200, 5, 8);
-var ensuiteLWall = new THREE.Mesh(ensuiteCube, cubeMat);
-ensuiteLWall.position.set(218, 0, -550);
+var ensuiteLWall = new THREE.Mesh(ensuiteCube, wallMat);
+ensuiteLWall.position.set(218, 15, -550);
 ensuiteLWall.receiveShadow = true;
 ensuiteLWall.castShadow = true;
 //ensuiteWall.rotation.y = Math.PI * 90 / 180;
 collidableMeshList.push(ensuiteLWall);
 scene.add(ensuiteLWall);
 
+
 // En-suite back wall
 var ensuiteCube = new THREE.BoxGeometry(200, 200, 5, 8);
-var ensuiteBWall = new THREE.Mesh(ensuiteCube, cubeMat);
-ensuiteBWall.position.set(250, 0, -475);
+var ensuiteBWall = new THREE.Mesh(ensuiteCube, wallMat);
+ensuiteBWall.position.set(250, 15, -475);
 ensuiteBWall.receiveShadow = true;
 ensuiteBWall.castShadow = true;
 ensuiteBWall.rotation.y = Math.PI * 90 / 180;
 collidableMeshList.push(ensuiteBWall);
 scene.add(ensuiteBWall);
-
-
-
-
-var doorMat = new THREE.MeshPhongMaterial({
-    map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
-});
-
-var doorMatFlipped = new THREE.MeshPhongMaterial({
-    map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
-});
 
 
 // Let's make all of the doors
@@ -614,20 +629,6 @@ for (i = 0; i < lightsArray.length; i++) {
 scene.add(mapLights);
 scene.add(mapPointLights);
 
-/*
-// test light
-var testLight = new THREE.SpotLight(0xFFffff,10);
-testLight.position.set(-250,95,-200);
-testLight.target.position.set(-250,0,-200);
-testLight.penumbra = 1;
-testLight.angle = 0.5;
-testLight.castShadow = true;
-testLight.intensity = 1;
-testLight.target.updateMatrixWorld();
-scene.add(testLight);
-var spotLightHelper5 = new THREE.SpotLightHelper(testLight);
-scene.add(spotLightHelper5);
-*/
 
 // Final room light
 var fallenLamp = new THREE.SpotLight(0xFFffff, 10);
@@ -800,7 +801,17 @@ mtlLoader.load('tippedSofa.mtl', function (materials) {
     }, onProgress, onError);
 });
 
-
+// As the sofa and lamp aren't collidable for some reason, add an invisble box over it that is collidable
+var collideMaterial = new THREE.MeshBasicMaterial({
+    transparent: true,
+    opacity: 0
+})
+var collideCube = new THREE.BoxGeometry(300, 100, 70, 8);
+var sofaCollideMesh = new THREE.Mesh(collideCube, collideMaterial);
+sofaCollideMesh.position.set(135, -50, -620);
+sofaCollideMesh.rotation.y = Math.PI * 90 / 180;
+collidableMeshList.push(sofaCollideMesh);
+scene.add(sofaCollideMesh);
 
 
 // Load the beds
@@ -819,12 +830,19 @@ mtlLoader.load('Bed.mtl', function (materials) {
             if (i == 0) {
                 min = -460;
                 minZ = 230;
+
             } else if (i == 3) {
+                //do the other side
                 min = 460;
                 minZ = 230;
+
+            }
+            if (i < 3) {
+                beds[i].rotation.y = Math.PI * 90 / 180;
+            } else {
+                beds[i].rotation.y = Math.PI * -90 / 180;
             }
             beds[i].position.set(min, -50, minZ);
-            beds[i].rotation.y = Math.PI * 90 / 180;
             beds[i].scale.set(1.5, 1.5, 1.5);
             beds[i].traverse(function (child) {
                     if (child instanceof THREE.Mesh) {
@@ -835,22 +853,44 @@ mtlLoader.load('Bed.mtl', function (materials) {
                     }
                 })
                 //console.log(beds[i]);
-            minZ -= 200;
+            minZ -= 230;
             scene.add(beds[i]);
         }
-        beds[1].position.set(50, -50, -700);
-        beds[1].rotation.y = Math.PI * 0 / 180;
+
     }, onProgress, onError);
 });
 
-// As the bed isn't collidable for some reason, add an invisble box over it that is collidable
-cubeMat = new THREE.MeshPhongMaterial({
-    color: 0x88898,
-    side: THREE.DoubleSide
+// Load final bed
+mtlLoader.load('Bed.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('Bed.obj', function (object) {
+        object.position.set(50, -50, -700);
+        object.rotation.y = Math.PI * 0 / 180;
+        object.scale.set(1.5, 1.5, 1.5);
+        object.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                child.geometry.computeVertexNormals();
+                collidableMeshList.push(child);
+            }
+        })
+        scene.add(object);
+    }, onProgress, onError);
 });
-var bedCube = new THREE.BoxGeometry(100, 100, 5, 8);
-var bedMesh = new THREE.Mesh(bedCube, cubeMat);
-bedMesh.position.set(50, -50, -700);
+
+
+// As the bed isn't collidable for some reason, add an invisble box over it that is collidable
+collideMaterial = new THREE.MeshBasicMaterial({
+    transparent: true,
+    opacity: 0
+})
+collideCube = new THREE.BoxGeometry(150, 100, 70, 8);
+var bedMesh = new THREE.Mesh(collideCube, collideMaterial);
+bedMesh.position.set(50, -50, -720);
 bedMesh.receiveShadow = true;
 bedMesh.castShadow = true;
 bedMesh.rotation.y = Math.PI * 90 / 180;
@@ -858,6 +898,7 @@ collidableMeshList.push(bedMesh);
 scene.add(bedMesh);
 
 
+var bedSideTables = [];
 // Load the bedside tables
 mtlLoader.load('bedSideTable.mtl', function (materials) {
     materials.preload();
@@ -865,43 +906,46 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('bedSideTable.obj', function (object) {
-        object.position.set(-475, -50, 175);
-        object.rotation.y = Math.PI * 90 / 180;
-        object.scale.set(1.5, 1.5, 1.5);
-        object.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-                child.geometry.computeVertexNormals();
-                collidableMeshList.push(child);
+        bedSideTables = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
+        var sameRoom = true;
+
+        min = 280;
+        minX = -475;
+        var intervalLength = 105;
+
+        for (i = 0; i < bedSideTables.length; i++) {
+            if (sameRoom) {
+                min -= intervalLength;
+                sameRoom = false;
+            } else {
+                min -= 126;
+                sameRoom = true;
             }
-        })
-        scene.add(object);
+            // Other side
+            if (i == 6) {
+                min = 287;
+                minX = 475;
+                sameRoom = true;
+
+            }
+            bedSideTables[i].position.set(minX, -50, min);
+            bedSideTables[i].rotation.y = Math.PI * 90 / 180;
+            bedSideTables[i].scale.set(1.5, 1.5, 1.5);
+            bedSideTables[i].traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.geometry.computeVertexNormals();
+                    collidableMeshList.push(child);
+                }
+            })
+            scene.add(bedSideTables[i]);
+
+
+        }
+
     }, onProgress, onError);
 });
-
-// Load the bedside tables
-mtlLoader.load('bedSideTable.mtl', function (materials) {
-    materials.preload();
-    var objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(materials);
-    objLoader.setPath('obj/');
-    objLoader.load('bedSideTable.obj', function (object) {
-        object.position.set(-475, -50, 280);
-        object.rotation.y = Math.PI * 90 / 180;
-        object.scale.set(1.5, 1.5, 1.5);
-        object.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-                child.geometry.computeVertexNormals();
-                collidableMeshList.push(child);
-            }
-        })
-        scene.add(object);
-    }, onProgress, onError);
-});
-
 
 var wardrobes = [];
 
@@ -914,11 +958,11 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
     objLoader.setPath('obj/');
     objLoader.load('closedWardrobe.obj', function (object) {
         wardrobes = [object.clone(), object.clone(), object.clone()];
-        minZ = 250;
+        minZ = 330;
         for (i = 0; i < wardrobes.length; i++) {
-            console.log(minZ);
-            wardrobes[i].position.set(-460, -45, minZ);
-            console.log(wardrobes[i].position);
+            //console.log(minZ);
+            wardrobes[i].position.set(-300, -45, minZ);
+            //console.log(wardrobes[i].position);
             wardrobes[i].rotation.y = Math.PI;
             wardrobes[i].scale.set(1.5, 1.5, 1.5);
             wardrobes[i].traverse(function (child) {
@@ -930,7 +974,7 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
                 }
             })
             scene.add(wardrobes[i]);
-            minZ = minZ - 250;
+            minZ = minZ - 245;
 
         }
         wardrobes[2].position.z += 45;
@@ -1109,26 +1153,6 @@ for (i=0; i < pointLights.length; i++){
 */
 
 
-
-/*
-// little cube to test lights
-cube = new THREE.BoxGeometry(20,20,20,20);
-var testCube = new THREE.Mesh(cube, cubeMat);
-testCube.position.set(0,0,0);
-testCube.receiveShadow = true;
-testCube.castShadow = true;
-collidableMeshList.push(testCube);
-scene.add(testCube);
-
-// little cube to test lights on wall
-cube = new THREE.BoxGeometry(20,20,20,20);
-var testCube2 = new THREE.Mesh(cube, cubeMat);
-testCube2.position.set(-200,0,-200);
-testCube2.receiveShadow = true;
-testCube2.castShadow = true;
-collidableMeshList.push(testCube2);
-scene.add(testCube2);
-*/
 
 //scene.add(camera);
 //camera.add(spotLight1);

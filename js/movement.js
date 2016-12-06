@@ -247,7 +247,6 @@ function openDoor(door) {
 }
 
 function itsLocked() {
-
     console.log("Called");
     var lockedText = document.createElement('h2');
     lockedText.style.position = 'absolute';
@@ -577,7 +576,7 @@ function animate() {
         }
 
         // After reaching another Z axis, ghost flies at you
-        if ((controls.getObject().position.z < -600) && (controls.getObject().position.x < 0)) {
+        if ((controls.getObject().position.z < -580) && (controls.getObject().position.x < 10)) {
             ghostAttacking = true;
             ghostOBJ.add(ghostScream);
             ghostScream.play();
