@@ -733,7 +733,7 @@ mtlLoader.load('Bed.mtl', function (materials) {
         }
         beds[1].position.set(50, -50, -700);
         beds[1].rotation.y = Math.PI * 0 / 180;
-        console.log(beds[1]);
+        //console.log(beds[1]);
     }, onProgress, onError);
 });
 
@@ -837,30 +837,45 @@ mtlLoader.load('openWardrobe.mtl', function (materials) {
 });
 
 
+
+
+
+
 // Load the ghost
-// Load the fallen lamp
-var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath('obj/');
-mtlLoader.load('ghost.mtl', function (materials) {
-    materials.preload();
-    var objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(materials);
-    objLoader.setPath('obj/');
-    objLoader.load('ghost.obj', function (object) {
-        object.position.set(-100, 0, -620);
-        object.rotation.y = Math.PI * 90 / 180;
-        object.traverse(function (child) {
-                if (child instanceof THREE.Mesh) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                    child.geometry.computeVertexNormals();
-                    collidableMeshList.push(child);
-                }
-            })
-            //object.scale.set(0.05,0.05,0.05);
-        scene.add(object);
-    }, onProgress, onError);
-});
+
+var ghostLoaded = false;
+var ghostOBJ;
+var ghostAttacking = false;
+
+function loadGhost() {
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setPath('obj/');
+    mtlLoader.load('ghost.mtl', function (materials) {
+        materials.preload();
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials(materials);
+        objLoader.setPath('obj/');
+        objLoader.load('ghost.obj', function (object) {
+            object.position.set(-100, -40, -620);
+            object.rotation.y = Math.PI * 90 / 180;
+            object.traverse(function (child) {
+                    if (child instanceof THREE.Mesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                        child.geometry.computeVertexNormals();
+                        collidableMeshList.push(child);
+                    }
+                })
+                //object.scale.set(0.05,0.05,0.05);
+            ghostOBJ = object;
+            scene.add(ghostOBJ);
+        }, onProgress, onError);
+
+    });
+    ghostLoaded = true;
+
+}
+
 
 
 

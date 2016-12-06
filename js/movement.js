@@ -348,6 +348,25 @@ function OpenWardrobeDoors() {
 
 
 
+var wait = false;
+var canTouchLights = true;
+setInterval(function () {
+
+    if (!wait) {
+        wait = true;
+        canTouchLights = false;
+        //console.log("Setting wait to true");
+    } else {
+        wait = false;
+        canTouchLights = true;
+        //console.log("Setting wait to false");
+
+    }
+}, 2000);
+
+
+var diffZ = 100;
+var diffX = 101;
 
 
 function animate() {
@@ -355,15 +374,27 @@ function animate() {
     requestAnimationFrame(animate);
     if (controlsEnabled) {
         var originPoint = character.position.clone();
-        setInterval(function () {
+        if (!wait) {
+            //console.log("Not waiting, so move lights");
             if (lightOn) {
-                lightsArray[3].position.y = 100;
-                lightOn = false;
+                setInterval(function () {
+                    if (canTouchLights) {
+                        lightsArray[3].position.y = 100;
+                        lightOn = false;
+                    }
+                }, 500);
             } else {
-                lightsArray[3].position.y = 80;
-                lightOn = true;
+                setInterval(function () {
+                    if (canTouchLights) {
+                        lightsArray[3].position.y = 80;
+                        lightOn = true;
+                    }
+
+
+                }, 500);
             }
-        }, 10);
+        }
+
         raycaster.ray.origin.copy(controls.getObject().position);
         raycaster.ray.origin.y -= 10;
         var intersections = raycaster.intersectObjects(objects);
@@ -517,7 +548,6 @@ function animate() {
         }
 
 
-
         if (freshStart) {
             //console.log("Moving char");
             controls.getObject().position.set(0, 0, 400);
@@ -526,21 +556,51 @@ function animate() {
         }
 
 
+        // Open wardrobe doors after reach certain Z axes
         if (controls.getObject().position.z < -380) {
             if (!wardrobeDoorsOpened) {
                 //console.log("Opening doors");
                 wardrobeDoorsOpened = true;
                 OpenWardrobeDoors();
+                if (!ghostLoaded) {
+                    loadGhost();
+                }
+            }
+        }
+
+        // After reaching another Z axis, ghost flies at you
+        if (controls.getObject().position.z < -450) {
+            ghostAttacking = true;
+        }
+        if (wardrobeDoorsOpened) {
+            if (ghostAttacking) {
+                if (diffZ != 0 && diffX != 0) {
+                    if (ghostOBJ.position.z < controls.getObject().position.z) {
+                        ghostOBJ.position.z += 2;
+                    } else {
+                        ghostOBJ.position.z -= 2;
+                    }
+                    if (ghostOBJ.position.x < controls.getObject().position.x) {
+                        ghostOBJ.position.x += 2;
+                    } else {
+                        ghostOBJ.position.x -= 2;
+                    }
+                    diffZ = ghostOBJ.position.z - controls.getObject().position.z;
+                    //console.log("Diff z = " + diffZ);
+
+                    diffX = ghostOBJ.position.x - controls.getObject().position.x;
+                    //console.log("Diff x = " + diffX);
+                } else {
+                    ghostAttacking = false;
+                }
             }
         }
 
 
 
-        //console.log(ray);
-        //console.log(controls.getObject().rotation.y);
-
         prevTime = time;
-
+        //console.log(ghostOBJ);
+        //var matrix = new THREE.Matrix4();
 
     }
     stats.end();
