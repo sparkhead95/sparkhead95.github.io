@@ -814,8 +814,8 @@ mtlLoader.load('Bed.mtl', function (materials) {
     objLoader.load('Bed.obj', function (object) {
         beds = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), , object.clone()];
         for (i = 0; i < beds.length; i++) {
-            console.log(i);
-            console.log(min);
+            //console.log(i);
+            //console.log(min);
             if (i == 0) {
                 min = -460;
                 minZ = 230;
@@ -827,14 +827,14 @@ mtlLoader.load('Bed.mtl', function (materials) {
             beds[i].rotation.y = Math.PI * 90 / 180;
             beds[i].scale.set(1.5, 1.5, 1.5);
             beds[i].traverse(function (child) {
-                if (child instanceof THREE.Mesh) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                    child.geometry.computeVertexNormals();
-                    collidableMeshList.push(child);
-                }
-            })
-            console.log(beds[i]);
+                    if (child instanceof THREE.Mesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                        child.geometry.computeVertexNormals();
+                        collidableMeshList.push(child);
+                    }
+                })
+                //console.log(beds[i]);
             minZ -= 200;
             scene.add(beds[i]);
         }
@@ -903,11 +903,11 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
 });
 
 
-minZ = 340;
 var wardrobes = [];
 
 // Load closed wardrobe
 mtlLoader.load('closedWardrobe.mtl', function (materials) {
+    minZ = 230;
     materials.preload();
     var objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(materials);
@@ -915,7 +915,9 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
     objLoader.load('closedWardrobe.obj', function (object) {
         wardrobes = [object.clone(), object.clone(), object.clone()];
         for (i = 0; i < wardrobes.length; i++) {
-            wardrobes[i].position.set(-300, -45, minZ);
+            console.log(minZ);
+            wardrobes[i].position.set(-460, -45, minZ);
+            console.log(wardrobes[i].position);
             wardrobes[i].rotation.y = Math.PI;
             wardrobes[i].scale.set(1.5, 1.5, 1.5);
             wardrobes[i].traverse(function (child) {
