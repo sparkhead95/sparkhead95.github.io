@@ -418,13 +418,48 @@ scene.add(finalTFrame);
 scene.add(finalRFrame);
 var oppositeDoorIDs = [];
 
-var doorMat = new THREE.MeshPhongMaterial({
-    map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
-});
+var doorMat = new THREE.MeshFaceMaterial([
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
+    }),
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
+    }),
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
+    }),
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
+    }),
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
+    }),
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
+    }),
+])
 
-var doorMatFlipped = new THREE.MeshPhongMaterial({
-    map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
-});
+
+var doorMatFlipped = new THREE.MeshFaceMaterial([
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
+    }),
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
+    }),
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
+    }),
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
+    }),
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
+    }),
+    new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
+    }),
+])
 
 
 // Final door
@@ -543,7 +578,7 @@ for (i = 0; i < doorsArray.length; i++) {
             minX = 100;
             minZ = 225;
             resetAxis = true;
-            doorMat = doorMatFlipped;
+            //doorMat = doorMatFlipped;
         }
     }
 
@@ -824,7 +859,7 @@ mtlLoader.load('Bed.mtl', function (materials) {
     objLoader.setPath('obj/');
     objLoader.load('Bed.obj', function (object) {
         beds = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), , object.clone()];
-        for (i = 0; i < beds.length; i++) {
+        for (i = 0; i < beds.length - 1; i++) {
             //console.log(i);
             //console.log(min);
             if (i == 0) {
@@ -907,16 +942,21 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
     objLoader.setPath('obj/');
     objLoader.load('bedSideTable.obj', function (object) {
         bedSideTables = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
-        var sameRoom = true;
 
+        var sameRoom = true;
+        var firstRun = true;
         min = 280;
         minX = -475;
         var intervalLength = 105;
 
         for (i = 0; i < bedSideTables.length; i++) {
             if (sameRoom) {
-                min -= intervalLength;
-                sameRoom = false;
+                if (firstRun) {
+                    firstRun = false;
+                } else {
+                    min -= intervalLength;
+                    sameRoom = false;
+                }
             } else {
                 min -= 126;
                 sameRoom = true;
@@ -926,8 +966,8 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
                 min = 287;
                 minX = 475;
                 sameRoom = true;
-
             }
+            console.log(i);
             bedSideTables[i].position.set(minX, -50, min);
             bedSideTables[i].rotation.y = Math.PI * 90 / 180;
             bedSideTables[i].scale.set(1.5, 1.5, 1.5);
@@ -940,7 +980,7 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
                 }
             })
             scene.add(bedSideTables[i]);
-
+            console.log(bedSideTables[i].position);
 
         }
 
@@ -957,11 +997,17 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('closedWardrobe.obj', function (object) {
-        wardrobes = [object.clone(), object.clone(), object.clone()];
+        wardrobes = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
         minZ = 330;
+        minX = -300;
+
         for (i = 0; i < wardrobes.length; i++) {
             //console.log(minZ);
-            wardrobes[i].position.set(-300, -45, minZ);
+            if (i == 3) {
+                minX = 300;
+                minZ = 342;
+            }
+            wardrobes[i].position.set(minX, -45, minZ);
             //console.log(wardrobes[i].position);
             wardrobes[i].rotation.y = Math.PI;
             wardrobes[i].scale.set(1.5, 1.5, 1.5);
@@ -974,7 +1020,12 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
                 }
             })
             scene.add(wardrobes[i]);
-            minZ = minZ - 245;
+            if (i == 4) {
+                minZ = minZ - 200;
+            } else {
+                minZ = minZ - 250;
+            }
+
 
         }
         wardrobes[2].position.z += 45;

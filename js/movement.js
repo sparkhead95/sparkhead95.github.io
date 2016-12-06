@@ -206,6 +206,15 @@ audioLoader.load('sounds/scream.ogg', function (buffer) {
 
 });
 
+var doorLocked = new THREE.PositionalAudio(listener);
+//console.log("Playing..");
+audioLoader.load('sounds/doorlocked.ogg', function (buffer) {
+    doorLocked.setBuffer(buffer);
+    doorLocked.setRefDistance(20);
+
+});
+
+
 
 
 function openDoor(door) {
@@ -246,7 +255,9 @@ function openDoor(door) {
     }, intervalNo);
 }
 
-function itsLocked() {
+function itsLocked(door) {
+    door.add(doorLocked);
+    doorLocked.play();
     console.log("Called");
     var lockedText = document.createElement('h2');
     lockedText.style.position = 'absolute';
@@ -548,7 +559,7 @@ function animate() {
                     }
                     // Check whether it's locked (might not be a door)
                     if (testCollisionResults[i].object.name == "locked") {
-                        itsLocked();
+                        itsLocked(testCollisionResults[i].object);
                     }
                 }
             }
@@ -576,7 +587,7 @@ function animate() {
         }
 
         // After reaching another Z axis, ghost flies at you
-        if ((controls.getObject().position.z < -580) && (controls.getObject().position.x < 10)) {
+        if ((controls.getObject().position.z < -580) && (controls.getObject().position.x < 30)) {
             ghostAttacking = true;
             ghostOBJ.add(ghostScream);
             ghostScream.play();
