@@ -907,13 +907,14 @@ var wardrobes = [];
 
 // Load closed wardrobe
 mtlLoader.load('closedWardrobe.mtl', function (materials) {
-    minZ = 230;
+
     materials.preload();
     var objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('closedWardrobe.obj', function (object) {
         wardrobes = [object.clone(), object.clone(), object.clone()];
+        minZ = 250;
         for (i = 0; i < wardrobes.length; i++) {
             console.log(minZ);
             wardrobes[i].position.set(-460, -45, minZ);
