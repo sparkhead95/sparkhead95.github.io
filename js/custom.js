@@ -32,28 +32,11 @@ var collidableMeshList = [];
 
 // Define a corridor
 
-/*
-// Floor
-var floorGeo = new THREE.PlaneGeometry(1000,1750,5,8);
-var floorTx = new THREE.MeshPhongMaterial({map:THREE.ImageUtils.loadTexture("img/floortex.jpg"), side: THREE.DoubleSide});
-floorMat.wrapS = floorMat.wrapT = THREE.RepeatWrapping;
-floorMat.repeat.set(2, 2);
-
-
-var floor = new THREE.Mesh(floorGeo, floorMat);
-
-floor.position.set(0,-50,100);
-floor.rotation.x =  Math.PI * 90 / 180;
-floor.receiveShadow = true;
-scene.add(floor);
-*/
-
-
 var floorGeo = new THREE.BoxGeometry(1000, 1750, 5, 8);
 var floorTx = THREE.ImageUtils.loadTexture('img/floortex.jpg');
 var floorNormalTx = THREE.ImageUtils.loadTexture('img/floornormal.png');
 floorTx.wrapS = floorTx.wrapT = THREE.RepeatWrapping;
-floorTx.repeat.set(10, 10);
+floorTx.repeat.set(20, 20);
 floorNormalTx.wrapS = floorTx.wrapT = THREE.RepeatWrapping;
 floorNormalTx.repeat.set(10, 10);
 var floorMat = new THREE.MeshPhongMaterial({
@@ -68,9 +51,6 @@ floor.receiveShadow = true;
 floor.name = "floor";
 floor.dynamic = true;
 scene.add(floor);
-
-
-
 
 
 
@@ -1272,7 +1252,7 @@ mtlLoader.load('ceilingLight.mtl', function (materials) {
                     minX = 350;
                     innerCounter++;
                 } else if (innerCounter == 2) {
-                    minX = 170;
+                    minX = 40;
                     min = -600;
                 }
             }
