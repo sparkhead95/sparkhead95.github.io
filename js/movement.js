@@ -587,7 +587,7 @@ function animate() {
         }
 
         // After reaching another Z axis, ghost flies at you
-        if ((controls.getObject().position.z < -580) && (controls.getObject().position.x < 30)) {
+        if ((controls.getObject().position.z < -580) && (controls.getObject().position.x < 40)) {
             ghostAttacking = true;
             ghostOBJ.add(ghostScream);
             ghostScream.play();

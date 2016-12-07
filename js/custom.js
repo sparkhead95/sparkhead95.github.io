@@ -782,7 +782,110 @@ manager.onProgress = function (item, loaded, total) {
     console.log(item, loaded, total);
 };
 
-//(395, -40, -610);
+// Bathroom
+
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath('obj/');
+mtlLoader.load('cubicals.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('cubicals.obj', function (object) {
+        object.position.set(300, -50, -150);
+        object.rotation.y = Math.PI * 180 / 180;
+        object.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.geometry.computeVertexNormals();
+                    collidableMeshList.push(child);
+                }
+            })
+            //object.scale.set(0.05,0.05,0.05);
+        scene.add(object);
+    }, onProgress, onError);
+});
+
+// Sink
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath('obj/');
+mtlLoader.load('sink.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('sink.obj', function (object) {
+        object.position.set(450, -50, -355);
+        //object.rotation.y = Math.PI * 180 / 180;
+        object.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                child.geometry.computeVertexNormals();
+                collidableMeshList.push(child);
+            }
+        })
+        object.scale.set(1.3, 1.3, 1.3);
+        scene.add(object);
+    }, onProgress, onError);
+});
+
+// urinal
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath('obj/');
+mtlLoader.load('urinal.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('urinal.obj', function (object) {
+        object.position.set(250, -35, -360);
+        //object.rotation.y = Math.PI * 180 / 180;
+        object.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                child.geometry.computeVertexNormals();
+                collidableMeshList.push(child);
+            }
+        })
+        object.scale.set(1.3, 1.3, 1.3);
+        scene.add(object);
+    }, onProgress, onError);
+});
+
+// Cubical doors
+cube = new THREE.BoxGeometry(80, 100, 5, 8);
+var cubicalDoor1 = new THREE.Mesh(cube, cubeMat);
+cubicalDoor1.position.set(455, 15, -205);
+cubicalDoor1.receiveShadow = true;
+cubicalDoor1.castShadow = true;
+cubicalDoor1.name = "locked";
+collidableMeshList.push(cubicalDoor1);
+scene.add(cubicalDoor1);
+
+var cubicalDoor2 = new THREE.Mesh(cube, cubeMat);
+cubicalDoor2.position.set(350, 15, -205);
+cubicalDoor2.receiveShadow = true;
+cubicalDoor2.castShadow = true;
+cubicalDoor2.name = "locked";
+collidableMeshList.push(cubicalDoor2);
+scene.add(cubicalDoor2);
+
+var cubicalDoor3 = new THREE.Mesh(cube, cubeMat);
+cubicalDoor3.position.set(250, 15, -205);
+cubicalDoor3.receiveShadow = true;
+cubicalDoor3.castShadow = true;
+cubicalDoor3.name = "locked";
+collidableMeshList.push(cubicalDoor3);
+scene.add(cubicalDoor3);
+
+
+
+
+
+
 
 // Load the fallen lamp
 var mtlLoader = new THREE.MTLLoader();
@@ -809,6 +912,7 @@ mtlLoader.load('fallenlamp.mtl', function (materials) {
         scene.add(object);
     }, onProgress, onError);
 });
+
 
 // Load tipped sofa in final room
 var mtlLoader = new THREE.MTLLoader();
@@ -858,7 +962,7 @@ mtlLoader.load('Bed.mtl', function (materials) {
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('Bed.obj', function (object) {
-        beds = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), , object.clone()];
+        beds = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
         for (i = 0; i < beds.length - 1; i++) {
             //console.log(i);
             //console.log(min);
@@ -941,7 +1045,7 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('bedSideTable.obj', function (object) {
-        bedSideTables = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
+        bedSideTables = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
 
         var sameRoom = true;
         var firstRun = true;
@@ -997,7 +1101,7 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
     objLoader.setMaterials(materials);
     objLoader.setPath('obj/');
     objLoader.load('closedWardrobe.obj', function (object) {
-        wardrobes = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
+        wardrobes = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
         minZ = 330;
         minX = -300;
 
