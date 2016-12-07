@@ -27,11 +27,11 @@ var axis = new THREE.AxisHelper(10);
 scene.add(axis);
 */
 
+// Define the array of things that we can collide with
 var collidableMeshList = [];
 
 
-// Define a corridor
-
+// Define the floor, try to implement normal textures
 var floorGeo = new THREE.BoxGeometry(1000, 1750, 5, 8);
 var floorTx = THREE.ImageUtils.loadTexture('img/floortex.jpg');
 var floorNormalTx = THREE.ImageUtils.loadTexture('img/floornormal.png');
@@ -70,7 +70,6 @@ scene.add(roof);
 
 
 // Define the lift
-
 // Left wall
 cube = new THREE.BoxGeometry(150, 100, 5, 8);
 var cubeMat = new THREE.MeshPhongMaterial({
@@ -85,7 +84,6 @@ lWall.rotation.y = Math.PI * 90 / 180;
 collidableMeshList.push(lWall);
 scene.add(lWall);
 
-
 // Back wall
 cube = new THREE.BoxGeometry(100, 100, 5, 8);
 var fWall = new THREE.Mesh(cube, cubeMat);
@@ -95,7 +93,7 @@ fWall.castShadow = true;
 collidableMeshList.push(fWall);
 scene.add(fWall);
 
-// Left wall
+// right wall, with lift buttons
 cube = new THREE.BoxGeometry(150, 100, 5, 8);
 var cubeMat = new THREE.MeshPhongMaterial({
     map: THREE.ImageUtils.loadTexture('img/rightwall.jpg'),
@@ -117,7 +115,7 @@ wallMat = new THREE.MeshPhongMaterial({
     side: THREE.DoubleSide
 });
 
-// front left wall
+// front left wall outside lift
 cube = new THREE.BoxGeometry(55, 200, 5, 8);
 var fLWall = new THREE.Mesh(cube, wallMat);
 fLWall.position.set(-75, 0, 350);
@@ -126,7 +124,7 @@ fLWall.castShadow = true;
 collidableMeshList.push(fLWall);
 scene.add(fLWall);
 
-// front right wall
+// front right wall outside lift
 cube = new THREE.BoxGeometry(55, 200, 5, 8);
 var fRWall = new THREE.Mesh(cube, wallMat);
 fRWall.position.set(75, 0, 350);
@@ -135,7 +133,7 @@ fRWall.castShadow = true;
 collidableMeshList.push(fRWall);
 scene.add(fRWall);
 
-// Lift threshold
+// Lift floor threshold
 liftThreshCube = new THREE.BoxGeometry(100, 5, 5, 8);
 var cubeMat = new THREE.MeshPhongMaterial({
     map: THREE.ImageUtils.loadTexture('img/leftDoor.jpg'),
@@ -170,7 +168,7 @@ liftFloor.castShadow = true;
 scene.add(liftFloor);
 
 
-
+// Define the roof(s)
 var cubeMat = new THREE.MeshPhongMaterial({
     color: 0xffffff,
     side: THREE.DoubleSide
@@ -197,7 +195,7 @@ scene.add(liftRoofCover);
 
 
 
-// front right wall
+// front right wall outside lift
 cube = new THREE.BoxGeometry(55, 200, 5, 8);
 var fRWall = new THREE.Mesh(cube, wallMat);
 fRWall.position.set(75, 0, 350);
@@ -229,6 +227,7 @@ liftRightDoor.name = "liftR";
 scene.add(liftRightDoor);
 
 
+// Define the flipped wall texture
 uWallMat = new THREE.MeshPhongMaterial({
     map: THREE.ImageUtils.loadTexture('img/uwall.jpg'),
     side: THREE.DoubleSide
@@ -288,8 +287,9 @@ collidableMeshList.push(secretLSep);
 scene.add(secretLSep);
 
 var min = 100; // Where the first separator is on the Z axis
-var startX = -300;
+var startX = -300; // Where the first separator is on the X axis
 
+// Loop through all separators, place them and add shadows
 for (i = 0; i < leftSeparators.length; i++) {
     leftSeparators[i] = new THREE.Mesh(cube, wallMat);
     leftSeparators[i].position.set(-300, 15, min);
@@ -355,6 +355,7 @@ for (i = 0; i < doorFrameArray.length; i++) {
     min = min - 200;
 }
 
+// Define the top frames of the corridor doors, left and right, as one big frame
 var tCube = new THREE.BoxGeometry(750, 50, 5, 8);
 var leftTFrame = new THREE.Mesh(tCube, uWallMat);
 leftTFrame.position.set(-100, 75, 0);
@@ -398,6 +399,7 @@ scene.add(finalTFrame);
 scene.add(finalRFrame);
 var oppositeDoorIDs = [];
 
+// Define the textures of all sides of doors
 var doorMat = new THREE.MeshFaceMaterial([
     new THREE.MeshPhongMaterial({
         map: THREE.ImageUtils.loadTexture('img/woodendoor.jpg')
@@ -419,7 +421,7 @@ var doorMat = new THREE.MeshFaceMaterial([
     }),
 ])
 
-
+// Define the textures of all sides of opposite doors
 var doorMatFlipped = new THREE.MeshFaceMaterial([
     new THREE.MeshPhongMaterial({
         map: THREE.ImageUtils.loadTexture('img/woodendoorflipped.jpg')
@@ -442,7 +444,7 @@ var doorMatFlipped = new THREE.MeshFaceMaterial([
 ])
 
 
-// Final door
+// Final doors definition
 cube = new THREE.BoxGeometry(50, 100, 5, 8);
 cube.translate(25, 0, 0);
 cubeMat = new THREE.MeshPhongMaterial({
@@ -493,7 +495,6 @@ collidableMeshList.push(esCover);
 scene.add(esCover);
 
 // Dynamic left wall final room
-
 var dLCube = new THREE.BoxGeometry(500, 200, 5, 8);
 var dLWall = new THREE.Mesh(dLCube, wallMat);
 dLWall.position.set(-100, 15, -625);
@@ -514,7 +515,6 @@ dRWall.castShadow = true;
 dRWall.rotation.y = Math.PI * 90 / 180;
 collidableMeshList.push(dRWall);
 scene.add(dRWall);
-
 
 
 
@@ -551,6 +551,7 @@ var resetAxis = false;
 
 var doorCounter = 0;
 
+// Loop through all doors and place them, control their shadows too
 for (i = 0; i < doorsArray.length; i++) {
     // right side
     if (doorCounter > 2) {
@@ -573,6 +574,7 @@ for (i = 0; i < doorsArray.length; i++) {
     collidableMeshList.push(doorsArray[i]);
     minZ = minZ - 200;
     doorsArray[i].castShadow = true;
+    doorsArray[i].receiveShadow = true;
     doors.add(doorsArray[i]);
     doorCounter++;
 }
@@ -580,7 +582,7 @@ for (i = 0; i < doorsArray.length; i++) {
 scene.add(doors);
 
 
-
+// Define all of the lights on the map. Pointlights commented out as they dont work
 var spotLight1, spotLight2, spotLight3, spotLight4, spotLight5, spotLight6, spotLight7, spotLight8, spotLight9, spotLight10;
 var lightsArray = [spotLight1, spotLight2, spotLight3, spotLight4, spotLight5, spotLight6, spotLight7, spotLight8, spotLight9, spotLight10]; // 1-4 is for the corridor, 5-7 is for the left rooms, 8-10 is for the right rooms
 //var pointLightsArray = [pointLight1, pointLight2, pointLight3, pointLight4, pointLight5, pointLight6, pointLight7, pointLight8, pointLight9, pointLight10]; // 1-4 is for the corridor, 5-7 is for the left rooms, 8-10 is for the right rooms
@@ -645,7 +647,7 @@ scene.add(mapLights);
 scene.add(mapPointLights);
 
 
-// Final room light
+// Final room light, with an attempt to make a bulb
 var fallenLamp = new THREE.SpotLight(0xFFffff, 10);
 fallenLamp.position.set(150, -40, -550);
 fallenLamp.target.position.set(35, 0, -340);
@@ -715,17 +717,18 @@ scene.add(rWardrobeDoor);
 
 
 
-
+// Define the camera for the scene. this will be modified by the pointerlockcontrols.
 var camera = new THREE.PerspectiveCamera(90, width / height, 0.1, 1000);
 camera.rotation.x = Math.PI * 90 / 180;
 
 camera.add(listener);
 
+// Define a small ambient light so people can see what they're doing
 var ambientLight = new THREE.AmbientLight(0xffffff, 0.05);
 scene.add(ambientLight);
 
 
-// Define character
+// Define character for collision
 var cubeGeometry = new THREE.BoxGeometry(20, 20, 10, 1, 1, 1);
 var wireMaterial = new THREE.MeshBasicMaterial({
     color: 0xff0000,
@@ -736,16 +739,7 @@ character.position.set(0, 0, 0);
 scene.add(character);
 
 
-
-/*
-// Define interaction cube
-cubeGeometry = new THREE.CubeGeometry(0.1,0.1,0.1,1,1,1);
-wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
-var interactionCube = new THREE.Mesh( cubeGeometry, wireMaterial );
-interactionCube.position.set(0,0,-10);
-scene.add(interactionCube);
-*/
-
+// Define an onprogress so we can see how loading objects went
 var onProgress = function (xhr) {
     if (xhr.lengthComputable) {
         var percentComplete = xhr.loaded / xhr.total * 100;
@@ -756,14 +750,16 @@ var onProgress = function (xhr) {
 var onError = function (xhr) {};
 
 
-
+// Loading manager to check how loading materials went
 var manager = new THREE.LoadingManager();
 manager.onProgress = function (item, loaded, total) {
     console.log(item, loaded, total);
 };
 
-// Bathroom
 
+
+// Bathroom
+// load cubicals and set position and shadow
 var mtlLoader = new THREE.MTLLoader();
 mtlLoader.setPath('obj/');
 mtlLoader.load('cubicals.mtl', function (materials) {
@@ -787,7 +783,7 @@ mtlLoader.load('cubicals.mtl', function (materials) {
     }, onProgress, onError);
 });
 
-// Sink
+// Sink, with pos and shadow
 var mtlLoader = new THREE.MTLLoader();
 mtlLoader.setPath('obj/');
 mtlLoader.load('sink.mtl', function (materials) {
@@ -835,7 +831,7 @@ mtlLoader.load('urinal.mtl', function (materials) {
     }, onProgress, onError);
 });
 
-// Cubical doors
+// Cubical doors. Can't be opened or closed. possible expansion in future.
 cube = new THREE.BoxGeometry(80, 100, 5, 8);
 var cubicalDoor1 = new THREE.Mesh(cube, cubeMat);
 cubicalDoor1.position.set(455, 15, -205);
@@ -860,10 +856,6 @@ cubicalDoor3.castShadow = true;
 cubicalDoor3.name = "locked";
 collidableMeshList.push(cubicalDoor3);
 scene.add(cubicalDoor3);
-
-
-
-
 
 
 
@@ -934,6 +926,7 @@ scene.add(sofaCollideMesh);
 
 
 // Load the beds
+// Define an array so we can access beds later
 var beds = [];
 
 mtlLoader.load('Bed.mtl', function (materials) {
@@ -943,6 +936,7 @@ mtlLoader.load('Bed.mtl', function (materials) {
     objLoader.setPath('obj/');
     objLoader.load('Bed.obj', function (object) {
         beds = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
+        // Loop through cloned beds and modify them
         for (i = 0; i < beds.length - 1; i++) {
             //console.log(i);
             //console.log(min);
@@ -1026,7 +1020,7 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
     objLoader.setPath('obj/');
     objLoader.load('bedSideTable.obj', function (object) {
         bedSideTables = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
-
+        // Loop through cloned bedside tables and modify them
         var sameRoom = true;
         var firstRun = true;
         min = 280;
@@ -1084,7 +1078,7 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
         wardrobes = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
         minZ = 330;
         minX = -300;
-
+        // Loop through cloned wardrobes and modify them
         for (i = 0; i < wardrobes.length; i++) {
             //console.log(minZ);
             if (i == 3) {
@@ -1126,7 +1120,7 @@ mtlLoader.load('sofa.mtl', function (materials) {
         sofas = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
         minZ = 135;
         minX = -320;
-
+        // Loop through cloned sofas and modify them
         for (i = 0; i < sofas.length; i++) {
             //console.log(minZ);
             if (i == 3) {
@@ -1157,9 +1151,6 @@ mtlLoader.load('sofa.mtl', function (materials) {
 
 
 
-
-
-
 // Load open wardrobe
 mtlLoader.load('openWardrobe.mtl', function (materials) {
     materials.preload();
@@ -1184,11 +1175,9 @@ mtlLoader.load('openWardrobe.mtl', function (materials) {
 
 
 
-
-
-
 // Load the ghost
 
+// Set bools for decision making in animate function
 var ghostLoaded = false;
 var ghostOBJ;
 var ghostAttacking = false;
@@ -1223,8 +1212,7 @@ function loadGhost() {
 }
 
 
-var testObject;
-
+// Define inner counter so we know when to change the X axes for the other side of the map
 var innerCounter = 0;
 var lightModels = [];
 
@@ -1269,7 +1257,7 @@ mtlLoader.load('ceilingLight.mtl', function (materials) {
             scene.add(lightModels[i]);
             min = min - 230;
         }
-        //console.log(testObject.geometry);
+
     }, onProgress, onError);
 });
 
@@ -1278,9 +1266,8 @@ var pointLight1 = new THREE.PointLight(0xFFffff, 0.7, 100);
 pointLight1.position.set(-350, 60, 220);
 scene.add(pointLight1);
 
-//var testObject2 = testObject.clone();
-//testObject2.position.set(0,80,0);
-//scene.add(testObject2);
+
+// THIS IS WHERE I TRIED TO LOAD POINTLIGHTS. CAUSES A LOT OF ERRORS AS THERE ARE APPARENTLY TOO MANY. KEEPING IT HERE FOR REFERENCE.
 
 /*
 min = 175;
@@ -1317,7 +1304,7 @@ for (i=0; i < pointLights.length; i++){
 //scene.add(camera);
 //camera.add(spotLight1);
 
-
+// update camera on window resize
 function onResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = (window.innerWidth / window.innerHeight);

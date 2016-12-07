@@ -1,10 +1,12 @@
 // Movement code
 
+// Define DOM elements, and variables for decision making in animate function
 var raycaster;
 var controls;
 var blocker = document.getElementById('blocker');
 var instructions = document.getElementById('instructions');
 var passout = document.getElementById('passout');
+var refreshGo = document.getElementById('refresh');
 var objects = [];
 var animating = false;
 var stageOne = true;
@@ -15,6 +17,7 @@ objects.push(floor);
 
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
+// handle pointerlock functions, such as if the player has pressed the screen and if they've pressed escape. Handles css changes.
 if (havePointerLock) {
 
     var element = document.body;
@@ -82,11 +85,12 @@ if (havePointerLock) {
     }, false);
 
 } else {
-
+    // Handle case user can't run pointerlock api
     instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
 
 }
 
+// set base variables for moving
 var controlsEnabled = false;
 var moveForward = false;
 var moveBackward = false;
@@ -98,10 +102,12 @@ var interactable = false;
 var prevTime = performance.now();
 var velocity = new THREE.Vector3();
 
+// Set's the pointerlock controls variables, where the camera is at the time
 controls = new THREE.PointerLockControls(camera);
 controls.getObject().position.set(0, -50, 400);
 scene.add(controls.getObject());
 
+// Takes in which key player is pressing down, set variable depending on what this is.
 var onKeyDown = function (event) {
 
     switch (event.keyCode) {
@@ -144,6 +150,7 @@ var onKeyDown = function (event) {
 
 };
 
+// Handles which key has just been let go
 var onKeyUp = function (event) {
 
     switch (event.keyCode) {
@@ -185,6 +192,7 @@ var onKeyUp = function (event) {
 document.addEventListener('keydown', onKeyDown, false);
 document.addEventListener('keyup', onKeyUp, false);
 
+// if the character is out of bounds, reset pos.
 function resetCharacter(character) {
     character.position.x = 0;
     character.position.y = 0;
@@ -192,8 +200,8 @@ function resetCharacter(character) {
 }
 
 
-// Interaction with objects. We'll have an invisible cube in front of the player at all times. If the cube collides with an object, and the character presses "E", that object will 'interact'. Definition of the cube is in the custom.js
 
+// load all audio's
 var doorMove = new THREE.PositionalAudio(listener);
 //console.log("Playing..");
 audioLoader.load('sounds/door.ogg', function (buffer) {
@@ -278,7 +286,7 @@ audioLoader.load('sounds/foot6.ogg', function (buffer) {
 
 });
 
-
+// Chooses a random footstep and plays it, whenever called
 function playFootstep() {
     var num = Math.floor(Math.random() * 6) + 1;
     var choice;
@@ -308,7 +316,7 @@ function playFootstep() {
 
 
 
-
+// handles the door rotation when called, and plays door sound
 function openDoor(door) {
     door.add(doorMove);
     doorMove.play();
@@ -336,6 +344,7 @@ function openDoor(door) {
                 }
             }
         } else {
+            // if door open, stop animation
             clearInterval(animateDoor);
             animating = false;
             if (door.name == "closed") {
@@ -347,6 +356,7 @@ function openDoor(door) {
     }, intervalNo);
 }
 
+// Play locked sound and bring up div when locked
 function itsLocked(door) {
     door.add(doorLocked);
     doorLocked.play();
@@ -370,20 +380,24 @@ function itsLocked(door) {
 
 }
 
-
+// Define our raycasters for future collision and interaction detection
 raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 10);
 var rayRAY = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 30);
+// take note of last position where we weren't colliding
 var lastFreeX;
 var lastFreeY;
 var lastFreeZ;
 var lightOn = true;
 
+// stats for fps
 var stats = new Stats();
 stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom);
 
+// initialise where the mouse is
 var mouse = new THREE.Vector2();
 
+// Opens lift doors, plays sound
 function OpenLiftDoors() {
     var i = 0;
     liftLeftDoor.add(liftArrived);
@@ -405,7 +419,7 @@ function OpenLiftDoors() {
 }
 
 
-
+// Redefines where the mouse is in local js
 function onMouseMove(event) {
 
     // calculate mouse position in normalized device coordinates
@@ -416,36 +430,9 @@ function onMouseMove(event) {
 
 }
 
-var musicPaused = false;
-
-/*
-var sound1 = new THREE.PositionalAudio( listener );
-				audioLoader.load( 'sounds/steps.ogg', function( buffer ) {
-					sound1.setBuffer( buffer );
-					sound1.setRefDistance( 20 );
-					sound1.play();
-				});
-				character.add( sound1 );
-*/
-
-
-
-function pauseMusic() {
-    if (!musicPaused) {
-        sound1.pause();
-        musicPaused = true;
-    }
-}
-
-function playMusic() {
-    if (musicPaused) {
-        //sound1.play();
-        musicPaused = false;
-    }
-}
 
 var wardrobeDoorsOpened = false;
-
+// Open wardrobe doors and play sound
 function OpenWardrobeDoors() {
     lWardrobeDoor.add(doorMove);
     doorMove.play();
@@ -464,7 +451,7 @@ function OpenWardrobeDoors() {
 }
 
 
-
+// Handles the light flicker value, slows it down so we dont spam the scene
 var wait = false;
 var canTouchLights = true;
 setInterval(function () {
@@ -483,7 +470,7 @@ setInterval(function () {
 
 
 
-
+// initial variables for defining the ghost attack and the difference between positions
 var diffZAbs = 100;
 var diffXAbs = 101;
 var ghostAttacked = false;
@@ -494,7 +481,7 @@ var addedDiv = false;
 var canPlayFootstep = true;
 var canPlayFootstepShift = false;
 
-
+// Handles the footstep interval, to make sure we dont play thousands per second
 setInterval(function () {
     if (canPlayFootstep) {
         canPlayFootstep = false;
@@ -504,6 +491,7 @@ setInterval(function () {
 
 }, 600);
 
+// Handles the footstep  sprint interval, to make sure we dont play thousands per second
 setInterval(function () {
     if (canPlayFootstepShift) {
         canPlayFootstepShift = false;
@@ -513,7 +501,7 @@ setInterval(function () {
 
 }, 300);
 
-
+// Initialise part two of the game. not yet finished.
 function partTwo() {
     stageOne = false;
     stageTwo = true;
@@ -523,7 +511,7 @@ function partTwo() {
 }
 
 
-// Create dust
+// Create dust. not yet working.. Retreived from this, trying to adapt: https://aerotwist.com/tutorials/creating-particles-with-three-js/
 var particleCount = 1800,
     particles = new THREE.Geometry(),
     pMaterial = new THREE.ParticleBasicMaterial({
@@ -562,16 +550,17 @@ particleSystem.sortParticles = true;
 scene.add(particleSystem);
 
 
-
-
-
-
-
+// This function is called every frame.
 function animate() {
     stats.begin();
+    // request the animation frame to run this function again
     requestAnimationFrame(animate);
+    // if we can play the game (screen pressed)
     if (controlsEnabled) {
+        // make a note of where we were before
         var originPoint = character.position.clone();
+
+        //Handles the light flicker
         if (!wait) {
             //console.log("Not waiting, so move lights");
             if (lightOn) {
@@ -593,6 +582,7 @@ function animate() {
             }
         }
 
+        // this raycaster handles collision of character.
         raycaster.ray.origin.copy(controls.getObject().position);
         raycaster.ray.origin.y -= 10;
         var intersections = raycaster.intersectObjects(objects);
@@ -604,7 +594,7 @@ function animate() {
         velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
         var hit = false;
 
-
+        // For every edge of the character cube, add a raycaster. if it's colliding with our collidable mesh, set hit to true, which reset character position
         for (var vertexIndex = 0; vertexIndex < character.geometry.vertices.length; vertexIndex++) {
             var localVertex = character.geometry.vertices[vertexIndex].clone();
             var globalVertex = localVertex.applyMatrix4(character.matrix);
@@ -618,7 +608,7 @@ function animate() {
             }
         }
 
-        // Footsteps check
+        // Footsteps control
         if ((moveForward == true) || (moveLeft == true) || (moveRight == true) || (moveBackward == true)) {
             if (shiftRun) {
                 if (canPlayFootstepShift) {
@@ -631,13 +621,9 @@ function animate() {
                     canPlayFootstep = false;
                 }
             }
-
-
         }
 
-
-
-
+        // if we haven't hit anything, reset where the safe place is
         if (hit == false) {
             //console.log("reset free");
             lastFreeX = character.position.x;
@@ -649,6 +635,8 @@ function animate() {
 
         }
 
+
+        // Handle key presses
         if (moveForward) {
             velocity.z -= 800.0 * delta;
         }
@@ -666,7 +654,7 @@ function animate() {
             velocity.x += 800.0 * delta;
         }
 
-
+        // Handle sprint
         if (shiftRun && moveForward) {
             velocity.z -= 1500.0 * delta;
         }
@@ -679,6 +667,7 @@ function animate() {
 
         //console.log("hit statement");
         //console.log(hit);
+        // reset position to last safe place if we collided
         if (!hit) {
             controls.getObject().translateX(velocity.x * delta);
             controls.getObject().translateY(velocity.y * delta);
@@ -693,7 +682,7 @@ function animate() {
 
         }
 
-
+        // Handles jump (not used)
         if (controls.getObject().position.y < 10) {
 
             velocity.y = 0;
@@ -723,25 +712,12 @@ function animate() {
         //console.log(controls.getObject().position);
         var pos = (controls.getObject().position);
         character.position.set(pos.x, pos.y, pos.z);
-        //interactionCube.position.set(pos.x,pos.y, pos.z - 1);
         //console.log(character.position);
 
+        // controls the interaction of objects, if the ray hits 
         rayRAY.ray.origin.set(controls.getObject().position);
         rayRAY.ray.direction.set(controls.getObject().rotation);
         rayRAY.setFromCamera(mouse, camera);
-
-
-
-        //console.log(originPoint);
-        //console.log(controls.getObject().position);
-        if (controls.getObject().position == originPoint) {
-
-            // This means we stopped moving. So:
-            pauseMusic();
-        } else {
-            //console.log("Moving");
-            //playMusic();
-        }
 
 
         var testCollisionResults = rayRAY.intersectObjects(collidableMeshList);
@@ -765,7 +741,7 @@ function animate() {
             }
         }
 
-
+        // handle if it's a new game
         if (freshStart) {
             //console.log("Moving char");
             controls.getObject().position.set(0, 0, 400);
@@ -823,9 +799,11 @@ function animate() {
                     ghostAttacked = true;
                     ghostScream.pause();
                 }
+                //handle if the ghost has got you
             } else if (ghostAttacked) {
                 //ghostAttacked = false;
                 if (!addedDiv) {
+                    // set the passout DOM
                     passout.style.opacity = "0";
                     passout.style.display = "block";
                     addedDiv = true;
@@ -836,16 +814,19 @@ function animate() {
                     //console.log(j);
                 } else if (!stageTwo) {
                     passout.style.opacity = "1";
+                    // trigger part two
                     partTwo();
                 }
             }
 
         }
 
+        // next stage of the game
         if (stageTwo) {
             if (!stageTwoStarted) {
                 setTimeout(function () {
                     passout.style.display = "none";
+                    refreshGo.style.display = "block";
                     //console.log("Set to none");
                 }, 2000);
                 stageTwoStarted = true;
