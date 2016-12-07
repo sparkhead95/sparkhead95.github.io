@@ -241,7 +241,6 @@ var foot1 = new THREE.PositionalAudio(listener);
 audioLoader.load('sounds/foot1.ogg', function (buffer) {
     foot1.setBuffer(buffer);
     foot1.setRefDistance(20);
-
 });
 var foot2 = new THREE.PositionalAudio(listener);
 //console.log("Playing..");
@@ -493,6 +492,8 @@ var x = 1;
 var stageTwoStarted = false;
 var addedDiv = false;
 var canPlayFootstep = true;
+var canPlayFootstepShift = false;
+
 
 setInterval(function () {
     if (canPlayFootstep) {
@@ -503,9 +504,14 @@ setInterval(function () {
 
 }, 600);
 
+setInterval(function () {
+    if (canPlayFootstepShift) {
+        canPlayFootstepShift = false;
+    } else {
+        canPlayFootstepShift = true;
+    }
 
-
-
+}, 300);
 
 
 function partTwo() {
@@ -569,10 +575,18 @@ function animate() {
 
         // Footsteps check
         if ((moveForward == true) || (moveLeft == true) || (moveRight == true) || (moveBackward == true)) {
-            if (canPlayFootstep) {
-                playFootstep();
-                canPlayFootstep = false;
+            if (shiftRun) {
+                if (canPlayFootstepShift) {
+                    playFootstep();
+                    canPlayFootstepShift = false;
+                }
+            } else {
+                if (canPlayFootstep) {
+                    playFootstep();
+                    canPlayFootstep = false;
+                }
             }
+
 
         }
 
