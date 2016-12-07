@@ -1244,21 +1244,21 @@ function loadGhost() {
 
 
 var testObject;
-min = 170;
-minX = 0;
+
 var innerCounter = 0;
+var lightModels = [];
 
-
-
-for (i = 0; i < 9; i++) {
-    //Load the ceiling lights
-    mtlLoader.load('ceilingLight.mtl', function (materials) {
-        materials.preload();
-        var objLoader = new THREE.OBJLoader();
-        objLoader.setMaterials(materials);
-        objLoader.setPath('obj/');
-        objLoader.load('ceilingLight.obj', function (object) {
-
+//Load the ceiling lights
+mtlLoader.load('ceilingLight.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('ceilingLight.obj', function (object) {
+        lightModels = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
+        min = 170;
+        minX = 0;
+        for (i = 0; i < lightModels.length; i++) {
             if (min < -320) {
                 //console.log("Reached the end");
                 if (innerCounter == 0) {
@@ -1270,15 +1270,15 @@ for (i = 0; i < 9; i++) {
                     //console.log("Setting to right side");
                     min = 220;
                     minX = 350;
+                    innerCounter++;
+                } else if (innerCounter == 2) {
+                    minX = 170;
+                    min = -600;
                 }
             }
 
-            object.position.set(minX, 80, min);
-            //console.log(object.position);
-            min = min - 230;
-            //object.rotation.y = Math.PI * 90/180;
-            //object.scale.set(1.5,1.5,1.5);
-            object.traverse(function (child) {
+            lightModels[i].position.set(minX, 80, min);
+            lightModels[i].traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
                     child.castShadow = true;
                     child.receiveShadow = true;
@@ -1286,13 +1286,12 @@ for (i = 0; i < 9; i++) {
                     collidableMeshList.push(child);
                 }
             })
-            testObject = object;
-            scene.add(testObject);
-            //console.log(testObject.geometry);
-        }, onProgress, onError);
-    });
-}
-
+            scene.add(lightModels[i]);
+            min = min - 230;
+        }
+        //console.log(testObject.geometry);
+    }, onProgress, onError);
+});
 
 
 var pointLight1 = new THREE.PointLight(0xFFffff, 0.7, 100);
