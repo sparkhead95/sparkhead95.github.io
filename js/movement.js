@@ -218,6 +218,95 @@ audioLoader.load('sounds/doorlocked.ogg', function (buffer) {
 
 });
 
+var liftArrived = new THREE.PositionalAudio(listener);
+//console.log("Playing..");
+audioLoader.load('sounds/ping.ogg', function (buffer) {
+    liftArrived.setBuffer(buffer);
+    liftArrived.setRefDistance(20);
+
+});
+
+var openLift = new THREE.PositionalAudio(listener);
+//console.log("Playing..");
+audioLoader.load('sounds/openlift.ogg', function (buffer) {
+    openLift.setBuffer(buffer);
+    openLift.setRefDistance(20);
+
+});
+
+
+// Load footsteps
+var foot1 = new THREE.PositionalAudio(listener);
+//console.log("Playing..");
+audioLoader.load('sounds/foot1.ogg', function (buffer) {
+    foot1.setBuffer(buffer);
+    foot1.setRefDistance(20);
+
+});
+var foot2 = new THREE.PositionalAudio(listener);
+//console.log("Playing..");
+audioLoader.load('sounds/foot2.ogg', function (buffer) {
+    foot2.setBuffer(buffer);
+    foot2.setRefDistance(20);
+
+});
+var foot3 = new THREE.PositionalAudio(listener);
+//console.log("Playing..");
+audioLoader.load('sounds/foot3.ogg', function (buffer) {
+    foot3.setBuffer(buffer);
+    foot3.setRefDistance(20);
+
+});
+var foot4 = new THREE.PositionalAudio(listener);
+//console.log("Playing..");
+audioLoader.load('sounds/foot4.ogg', function (buffer) {
+    foot4.setBuffer(buffer);
+    foot4.setRefDistance(20);
+
+});
+var foot5 = new THREE.PositionalAudio(listener);
+//console.log("Playing..");
+audioLoader.load('sounds/foot5.ogg', function (buffer) {
+    foot5.setBuffer(buffer);
+    foot5.setRefDistance(20);
+
+});
+var foot6 = new THREE.PositionalAudio(listener);
+//console.log("Playing..");
+audioLoader.load('sounds/foot6.ogg', function (buffer) {
+    foot6.setBuffer(buffer);
+    foot6.setRefDistance(20);
+
+});
+
+
+function playFootstep() {
+    var num = Math.floor(Math.random() * 6) + 1;
+    var choice;
+    switch (num) {
+    case 1:
+        choice = foot1;
+        break;
+    case 2:
+        choice = foot2;
+        break;
+    case 3:
+        choice = foot3;
+        break;
+    case 4:
+        choice = foot4;
+        break;
+    case 5:
+        choice = foot5;
+        break;
+    case 6:
+        choice = foot6;
+        break;
+    }
+    character.add(choice);
+    choice.play();
+}
+
 
 
 
@@ -298,7 +387,14 @@ var mouse = new THREE.Vector2();
 
 function OpenLiftDoors() {
     var i = 0;
+    liftLeftDoor.add(liftArrived);
+    liftLeftDoor.add(openLift);
+    liftRightDoor.add(openLift);
+    openLift.play();
+    liftArrived.play();
     var animateDoor = setInterval(function () {
+
+
         if (i < 200) {
             liftLeftDoor.position.x -= Math.PI * 10 / 180;
             liftRightDoor.position.x += Math.PI * 10 / 180;
@@ -396,6 +492,19 @@ var j = 0;
 var x = 1;
 var stageTwoStarted = false;
 var addedDiv = false;
+var canPlayFootstep = true;
+
+setInterval(function () {
+    if (canPlayFootstep) {
+        canPlayFootstep = false;
+    } else {
+        canPlayFootstep = true;
+    }
+
+}, 600);
+
+
+
 
 
 
@@ -457,6 +566,18 @@ function animate() {
                 //console.log("hit");
             }
         }
+
+        // Footsteps check
+        if ((moveForward == true) || (moveLeft == true) || (moveRight == true) || (moveBackward == true)) {
+            if (canPlayFootstep) {
+                playFootstep();
+                canPlayFootstep = false;
+            }
+
+        }
+
+
+
 
         if (hit == false) {
             //console.log("reset free");
@@ -682,10 +803,6 @@ function animate() {
     renderer.render(scene, camera);
 
 }
-
-
-
-
 
 animate();
 controls.getObject().position.set(0, 10, 400);
