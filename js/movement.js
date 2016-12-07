@@ -4,8 +4,12 @@ var raycaster;
 var controls;
 var blocker = document.getElementById('blocker');
 var instructions = document.getElementById('instructions');
+var passout = document.getElementById('passout');
 var objects = [];
 var animating = false;
+var stageOne = true;
+var stageTwo = false;
+var stageTwo = false;
 
 objects.push(floor);
 
@@ -361,7 +365,7 @@ function OpenWardrobeDoors() {
             clearInterval(animateDoor);
         }
 
-    }, 40)
+    }, 40);
 }
 
 
@@ -383,8 +387,12 @@ setInterval(function () {
 }, 2000);
 
 
-var diffZ = 100;
-var diffX = 101;
+
+
+var diffZAbs = 100;
+var diffXAbs = 101;
+var ghostAttacked = false;
+var j = 0;
 
 
 function animate() {
@@ -594,7 +602,9 @@ function animate() {
         }
         if (wardrobeDoorsOpened) {
             if (ghostAttacking) {
-                if (diffZ != 0 && diffX != 0) {
+                //console.log("Diff z = " + diffZAbs);
+                //console.log("Diff x = " + diffXAbs);
+                if (diffZAbs > 2 || diffXAbs > 2) {
                     if (ghostOBJ.position.z < controls.getObject().position.z) {
                         ghostOBJ.position.z += 2;
                     } else {
@@ -606,20 +616,37 @@ function animate() {
                         ghostOBJ.position.x -= 2;
                     }
                     diffZ = ghostOBJ.position.z - controls.getObject().position.z;
-                    //console.log("Diff z = " + diffZ);
+                    diffZAbs = Math.abs(diffZ);
+
 
                     diffX = ghostOBJ.position.x - controls.getObject().position.x;
-                    //console.log("Diff x = " + diffX);
+                    diffXAbs = Math.abs(diffX);
+
 
                     ghostOBJ.lookAt(character);
 
 
                 } else {
                     ghostAttacking = false;
+                    ghostAttacked = true;
+                    ghostScream.pause();
+                }
+            } else if (ghostAttacked) {
+
+                passout.style.opacity = "0";
+                passout.style.display = "block";
+                if (j < 1) {
+                    passout.style.opacity = j;
+                    j += 0.01;
+                    console.log(j);
+                } else {
+                    passout.style.opacity = "1";
+                    stageTwo();
                 }
             }
-        }
 
+        }
+        //console.log(passout.style.opacity);
 
 
         prevTime = time;
@@ -627,6 +654,13 @@ function animate() {
     }
     stats.end();
     renderer.render(scene, camera);
+
+}
+
+function stageTwo() {
+    stageOne = false;
+    controls.getObject().position.set(0, 0, 500);
+    ghostOBJ.position.set(-100, -25, -620);
 
 }
 
