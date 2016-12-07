@@ -393,7 +393,19 @@ var diffZAbs = 100;
 var diffXAbs = 101;
 var ghostAttacked = false;
 var j = 0;
+var x = 1;
+var stageTwoStarted = false;
+var addedDiv = false;
 
+
+
+function partTwo() {
+    stageOne = false;
+    stageTwo = true;
+    controls.getObject().position.set(0, 0, 400);
+    ghostOBJ.position.set(-100, -25, -620);
+
+}
 
 function animate() {
     stats.begin();
@@ -632,21 +644,35 @@ function animate() {
                     ghostScream.pause();
                 }
             } else if (ghostAttacked) {
-
-                passout.style.opacity = "0";
-                passout.style.display = "block";
+                //ghostAttacked = false;
+                if (!addedDiv) {
+                    passout.style.opacity = "0";
+                    passout.style.display = "block";
+                    addedDiv = true;
+                }
                 if (j < 1) {
                     passout.style.opacity = j;
                     j += 0.01;
-                    console.log(j);
-                } else {
+                    //console.log(j);
+                } else if (!stageTwo) {
                     passout.style.opacity = "1";
-                    stageTwo();
+                    partTwo();
                 }
             }
 
         }
-        //console.log(passout.style.opacity);
+
+        if (stageTwo) {
+            if (!stageTwoStarted) {
+                setTimeout(function () {
+                    passout.style.display = "none";
+                    //console.log("Set to none");
+                }, 2000);
+                stageTwoStarted = true;
+            }
+
+
+        }
 
 
         prevTime = time;
@@ -657,12 +683,6 @@ function animate() {
 
 }
 
-function stageTwo() {
-    stageOne = false;
-    controls.getObject().position.set(0, 0, 500);
-    ghostOBJ.position.set(-100, -25, -620);
-
-}
 
 
 

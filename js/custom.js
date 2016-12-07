@@ -1071,7 +1071,7 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
                 minX = 475;
                 sameRoom = true;
             }
-            console.log(i);
+            //console.log(i);
             bedSideTables[i].position.set(minX, -50, min);
             bedSideTables[i].rotation.y = Math.PI * 90 / 180;
             bedSideTables[i].scale.set(1.5, 1.5, 1.5);
@@ -1084,7 +1084,7 @@ mtlLoader.load('bedSideTable.mtl', function (materials) {
                 }
             })
             scene.add(bedSideTables[i]);
-            console.log(bedSideTables[i].position);
+            //console.log(bedSideTables[i].position);
 
         }
 
@@ -1136,8 +1136,51 @@ mtlLoader.load('closedWardrobe.mtl', function (materials) {
     }, onProgress, onError);
 });
 
+// Load sofas
+mtlLoader.load('sofa.mtl', function (materials) {
+    materials.preload();
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('obj/');
+    objLoader.load('sofa.obj', function (object) {
+        sofas = [object.clone(), object.clone(), object.clone(), object.clone(), object.clone()];
+        minZ = 135;
+        minX = -320;
+
+        for (i = 0; i < sofas.length; i++) {
+            //console.log(minZ);
+            if (i == 3) {
+                minX = 320;
+                minZ = 135;
+            }
+            sofas[i].position.set(minX, -45, minZ);
+            //console.log(wardrobes[i].position);
+            //sofas[i].rotation.y = Math.PI * 180 / 180;
+            sofas[i].scale.set(1.5, 1.5, 1.5);
+            sofas[i].traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.geometry.computeVertexNormals();
+                    collidableMeshList.push(child);
+                }
+            })
+            scene.add(sofas[i]);
+            if (i == 1) {
+                minZ = minZ - 275;
+            } else {
+                minZ = minZ - 200;
+            }
+        }
+    }, onProgress, onError);
+});
+
+
+
+
+
+
 // Load open wardrobe
-// Load closed wardrobe
 mtlLoader.load('openWardrobe.mtl', function (materials) {
     materials.preload();
     var objLoader = new THREE.OBJLoader();
@@ -1198,23 +1241,6 @@ function loadGhost() {
     ghostLoaded = true;
 
 }
-
-
-
-
-
-/*
-for (i = 0; i < myObjects.length; i++) {
-    console.log()
-}
-*/
-
-
-/*
-var newWardrobe = wardrobe.clone();
-newWardrobe.position.set(0, 0, 0);
-scene.add(newWardrobe);
-*/
 
 
 var testObject;
