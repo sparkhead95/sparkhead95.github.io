@@ -360,7 +360,6 @@ function openDoor(door) {
 function itsLocked(door) {
     door.add(doorLocked);
     doorLocked.play();
-    console.log("Called");
     var lockedText = document.createElement('h2');
     lockedText.style.position = 'absolute';
     lockedText.style.width = 200;
@@ -474,6 +473,7 @@ setInterval(function () {
 var diffZAbs = 100;
 var diffXAbs = 101;
 var ghostAttacked = false;
+var ghostSetToAttacked = false;
 var j = 0;
 var x = 1;
 var stageTwoStarted = false;
@@ -764,7 +764,11 @@ function animate() {
 
         // After reaching another Z axis, ghost flies at you
         if ((controls.getObject().position.z < -580) && (controls.getObject().position.x < 40)) {
-            ghostAttacking = true;
+            if (!ghostSetToAttacked) {
+                ghostAttacking = true;
+                ghostSetToAttacked = true;;
+            }
+
             ghostOBJ.add(ghostScream);
             ghostScream.play();
         }
