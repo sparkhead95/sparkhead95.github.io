@@ -1208,7 +1208,6 @@ function loadGhost() {
 
     });
     ghostLoaded = true;
-
 }
 
 

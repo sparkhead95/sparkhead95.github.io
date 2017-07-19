@@ -7,11 +7,35 @@ var blocker = document.getElementById('blocker');
 var instructions = document.getElementById('instructions');
 var passout = document.getElementById('passout');
 var refreshGo = document.getElementById('refresh');
+var wakeup = document.getElementById('wakeup');
 var objects = [];
 var animating = false;
 var stageOne = true;
 var stageTwo = false;
 var stageTwo = false;
+
+// initial variables for defining the ghost attack and the difference between positions
+var diffZAbs = 100;
+var diffXAbs = 101;
+var ghostAttacked = false;
+var ghostSetToAttacked = false;
+var j = 0;
+var x = 1;
+// y is for the counter for the fade in at the start of stage 0
+var y = 1;
+var fadedIn = false;
+var stageTwoStarted = false;
+var addedDiv = false;
+var canPlayFootstep = true;
+var canPlayFootstepShift = false;
+
+var cleaning = false;
+
+// We already have a way of shutting doors, but we need a way of knowing which doors have been opened so that we dont try to rotation those that haven't. Seeing as we don't have tuple natives in javascript, we'll have to have two arrays, that hold the door objects and their rotation. This means that every position in the door array has their relative Y rotation in the rotation array. E.g openedDoors[3] has their original Y rotation in doorRotations[3].
+
+var openedDoors = [];
+var doorRotations = [];
+
 
 objects.push(floor);
 
@@ -318,6 +342,7 @@ function playFootstep() {
 
 // handles the door rotation when called, and plays door sound
 function openDoor(door) {
+
     door.add(doorMove);
     doorMove.play();
     var i = 0;
@@ -328,9 +353,8 @@ function openDoor(door) {
                 if (door.name == "closed") {
                     door.rotation.y += Math.PI * 1 / 180;
                     i++;
-
+                    //console.log(door.rotation.y);
                 } else {
-
                     door.rotation.y -= Math.PI * 1 / 180;
                     i++;
                 }
@@ -338,6 +362,7 @@ function openDoor(door) {
                 if (door.name == "closed") {
                     door.rotation.y -= Math.PI * 1 / 180;
                     i++;
+                    //console.log(door.rotation.y);
                 } else {
                     door.rotation.y += Math.PI * 1 / 180;
                     i++;
@@ -349,11 +374,16 @@ function openDoor(door) {
             animating = false;
             if (door.name == "closed") {
                 door.name = "open";
+                // Add this to the list of open doors
+                openedDoors.push(door);
+                // Add it's original rotation to the array of rotations. We'll restore this rotation when the stages are over, during the cleanup() function.
+                doorRotations.push(door.rotation.y);
             } else {
                 door.name = "closed";
             }
         }
     }, intervalNo);
+
 }
 
 // Play locked sound and bring up div when locked
@@ -468,18 +498,37 @@ setInterval(function () {
 }, 2000);
 
 
+function cleanup() {
+    // loop through all objects, if they're named "open", close them all.. but we can't do that, because doors can be at different rotations even if they're both open. So instead, check what rotation they're at, close them if they're at our specific open integer. If y rotation is 3.3161255787892117, it's open on the left side of corridor. If it's -0.17453292519943475, it's open on the right side
 
-// initial variables for defining the ghost attack and the difference between positions
-var diffZAbs = 100;
-var diffXAbs = 101;
-var ghostAttacked = false;
-var ghostSetToAttacked = false;
-var j = 0;
-var x = 1;
-var stageTwoStarted = false;
-var addedDiv = false;
-var canPlayFootstep = true;
-var canPlayFootstepShift = false;
+    // If we're not already cleaning
+    if (!cleaning) {
+        // Set cleaning to true 
+        cleaning = true;
+        // Get every item in the scene
+        scene.traverse(function (node) {
+            // Check if it's a mesh
+            if (node instanceof THREE.Mesh) {
+                if (node.name == "open") {
+                    if (node.rotation.y == 3.3161255787892117) {
+                        //console.log("Found an open door on the left side. Position: " + node.position);
+                        node.rotation = 1.5882496193148399;
+                        console.log("Reset left door rotation");
+                    } else if (node.rotation.y == -0.17453292519943475) {
+                        //console.log("Found an open door on the right side. Position: " + node.position);
+                        node.rotation = 1.5533430342749532;
+                        console.log("Reset right door rotation");
+                    }
+                }
+            }
+        });
+    }
+
+    // Else assume we're finished cleaning.. begin with stage two.
+}
+
+
+
 
 // Handles the footstep interval, to make sure we dont play thousands per second
 setInterval(function () {
@@ -743,10 +792,19 @@ function animate() {
 
         // handle if it's a new game
         if (freshStart) {
-            //console.log("Moving char");
             controls.getObject().position.set(0, 0, 400);
-            OpenLiftDoors();
-            freshStart = false;
+            if (!fadedIn) {
+                if (y > 0) {
+                    //console.log(y);
+                    wakeup.style.opacity = y;
+                    y -= 0.01;
+                } else {
+                    fadedIn = true;
+                    wakeup.style.display = "none";
+                    OpenLiftDoors();
+                    freshStart = false;
+                }
+            }
         }
 
 
@@ -828,15 +886,15 @@ function animate() {
         // next stage of the game
         if (stageTwo) {
             if (!stageTwoStarted) {
+                cleanup();
                 setTimeout(function () {
+                    controls.getObject().position.set(0, 0, 400);
                     passout.style.display = "none";
-                    refreshGo.style.display = "block";
+                    //refreshGo.style.display = "block";
                     //console.log("Set to none");
                 }, 2000);
                 stageTwoStarted = true;
             }
-
-
         }
 
 
